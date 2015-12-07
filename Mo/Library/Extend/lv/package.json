@@ -1,0 +1,22 @@
+﻿{
+	"name" : "lv",
+	"version" : "1.0.0",
+	"description" : "一个DateQuery模块，用来处理时间。DateQuery JavaScript Library 0.1.4",
+	"keywords" : ["DateQuery", "lv"],
+	"homepage" : "http://mpi.thinkasp.cn/?/mpi/package/info/lv",
+	"license" : "GPLv3",
+	"author" : 
+	{
+		"name" : "levi",
+		"email" : "",
+		"url" : "http://levi.cg.am"
+	},
+	"files" : [
+		"index.js"
+	],
+	"main" : "lv",
+	"repository":{
+		"type" : "git",
+		"url" : "https://coding.net/u/levi/p/levi-js/git"
+	}
+}

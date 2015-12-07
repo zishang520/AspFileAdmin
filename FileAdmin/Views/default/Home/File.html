@@ -1,0 +1,53 @@
+﻿<extend file="../layout/layout.html" />
+<selection name="title">文件管理器-文件夹目录</selection>
+<selection name="header"></selection>
+<selection name="body">
+	<div class="panel panel-primary">
+		<div class="panel-heading"> 
+			<h3 class="panel-title">文件管理器</h3>
+		</div>
+		<div class="panel-body">
+			
+		</div>
+		<a href="{$upath}" class="list-group-item list-group-item-danger"><span class="glyphicon glyphicon-level-up" aria-hidden="true"></span> 上级目录</a>
+		<li class="list-group-item list-group-item-info">文件属性</li>
+		<nempty name="content">
+			<div class="alert alert-danger alert-dismissible fade in" role="alert">
+				<strong>{$content}</strong>
+			</div>
+		</else>
+		<nempty name="file">
+			<dl class="dl-horizontal">
+				<dt>Attributes</dt>
+				<dd>{$file.Attributes}</dd>
+				<dt>DateCreated</dt>
+				<dd>{$file.DateCreated:F.formatdate="yyyy-MM-dd HH:mm:ss"}</dd>
+				<dt>DateLastAccessed</dt>
+				<dd>{$file.DateLastAccessed:F.formatdate="yyyy-MM-dd HH:mm:ss"}</dd>
+				<dt>DateLastModified</dt>
+				<dd>{$file.DateLastModified:F.formatdate="yyyy-MM-dd HH:mm:ss"}</dd>
+				<dt>Drive</dt>
+				<dd>{$file.Drive}</dd>
+				<dt>Name</dt>
+				<dd>{$file.Name}</dd>
+				<dt>ParentFolder</dt>
+				<dd>{$file.ParentFolder}</dd>
+				<dt>Path</dt>
+				<dd>{$file.Path}</dd>
+				<dt>ShortName</dt>
+				<dd>{$file.ShortName}</dd>
+				<dt>ShortPath</dt>
+				<dd>{$file.ShortPath}</dd>
+				<dt>Size</dt>
+				<dd>{$file.Size:SizeConvert}</dd>
+				<dt>Type</dt>
+				<dd>{$file.Type}</dd>
+			</dl>
+		</nempty>
+	</nempty>
+	<div class="panel-footer">
+		<include file="../public/panel_foot.html" />
+	</div>
+</div>
+</selection>
+<selection name="foot"></selection>

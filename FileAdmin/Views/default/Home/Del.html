@@ -1,0 +1,45 @@
+<extend file="../layout/layout.html" />
+<selection name="title">文件管理器-文件夹目录</selection>
+<selection name="header"></selection>
+<selection name="body">
+	<div class="panel panel-primary">
+		<div class="panel-heading"> 
+			<h3 class="panel-title">文件管理器</h3>
+		</div>
+		<div class="panel-body">
+			
+		</div>
+		<a href="{$upath}" class="list-group-item list-group-item-danger"><span class="glyphicon glyphicon-level-up" aria-hidden="true"></span> 上级目录</a>
+		<li class="list-group-item list-group-item-info">文件/文件夹删除</li>
+		<li class="list-group-item">
+			<expression and="content:is_empty eq false">
+				<div class="alert alert-danger alert-dismissible fade in" role="alert">
+					<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">×</span></button>
+					<strong>{$content}</strong>
+				</div>
+				<else />
+				<nempty name="info">
+					<div class="alert <eq name="info.status" value="1">alert-success</else>alert-danger</eq> alert-dismissible fade in" role="alert">
+						<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">×</span></button>
+						<strong>{$info.info}</strong>
+					</div>
+				</else>
+				<div class="alert alert-warning alert-dismissible fade in" role="alert">
+					<h4 id="oh-snap!-you-got-an-error!">警告！！！<a class="anchorjs-link" href="#oh-snap!-you-got-an-error!"><span class="anchorjs-icon"></span></a></h4>
+					<p>即将删除 ”{$filepath:FileName}“ 确认你已经知晓该操作带来的后果！！！！！！</p>
+					<p>
+						<form name="input" action="{$U('Home/Del','Path='+\{$@filepath:F.encode\})}" method="POST" class="form-inline">
+							<input type="hidden" name="__csrf" value="{$__csrf}">
+							<button type="submit" class="btn btn-sm btn-danger">确认删除</button>
+						</form>
+					</p>
+				</div>
+			</nempty>
+		</expression>
+	</li>
+	<div class="panel-footer">
+		<include file="../public/panel_foot.html" />
+	</div>
+</div>
+</selection>
+<selection name="foot"></selection>

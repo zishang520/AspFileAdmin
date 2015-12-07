@@ -1,0 +1,59 @@
+﻿<extend file="../layout/layout.html" />
+<selection name="title">文件管理器-文件夹目录</selection>
+<selection name="header"></selection>
+<selection name="body">
+	<div class="panel panel-primary">
+		<div class="panel-heading"> 
+			<h3 class="panel-title">文件管理器</h3>
+		</div>
+		<div class="panel-body">
+			
+		</div>
+		<a href="{$upath}" class="list-group-item list-group-item-danger"><span class="glyphicon glyphicon-level-up" aria-hidden="true"></span> 上级目录</a>
+		<li class="list-group-item list-group-item-info">文件夹属性</li>
+		<nempty name="content">
+			<div class="alert alert-danger alert-dismissible fade in" role="alert">
+				<strong>{$content}</strong>
+			</div>
+		</else>
+		<nempty name="directory">
+			<dl class="dl-horizontal">
+				<dt>Attributes</dt>
+				<dd>{$directory.Attributes}</dd>
+				<dt>DateCreated</dt>
+				<dd>{$directory.DateCreated:F.formatdate="yyyy-MM-dd HH:mm:ss"}</dd>
+				<dt>DateLastAccessed</dt>
+				<dd>{$directory.DateLastAccessed:F.formatdate="yyyy-MM-dd HH:mm:ss"}</dd>
+				<dt>DateLastModified</dt>
+				<dd>{$directory.DateLastModified:F.formatdate="yyyy-MM-dd HH:mm:ss"}</dd>
+				<dt>Drive</dt>
+				<dd>{$directory.Drive}</dd>
+				<dt>Files</dt>
+				<dd>{$directory.Files}</dd>
+				<dt>IsRootFolder</dt>
+				<dd>{$directory.IsRootFolder}</dd>
+				<dt>Name</dt>
+				<dd>{$directory.Name}</dd>
+				<dt>ParentFolder</dt>
+				<dd>{$directory.ParentFolder}</dd>
+				<dt>Path</dt>
+				<dd>{$directory.Path}</dd>
+				<dt>ShortName</dt>
+				<dd>{$directory.ShortName}</dd>
+				<dt>ShortPath</dt>
+				<dd>{$directory.ShortPath}</dd>
+				<dt>Size</dt>
+				<dd>{$directory.Size:SizeConvert}</dd>
+				<dt>Type</dt>
+				<dd>{$directory.Type}</dd>
+				<dt>SubFolders</dt>
+				<dd>{$directory.SubFolders}</dd>
+			</dl>
+		</nempty>
+	</nempty>
+	<div class="panel-footer">
+		<include file="../public/panel_foot.html" />
+	</div>
+</div>
+</selection>
+<selection name="foot"></selection>

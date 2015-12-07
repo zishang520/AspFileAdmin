@@ -1,0 +1,25 @@
+﻿{
+	"name" : "jszip",
+	"version" : "1.0.0",
+	"description" : "jszip。",
+	"keywords" : ["jszip"],
+	"homepage" : "http://stuk.github.io/jszip/",
+	"license" : "GPLv3",
+	"author" : 
+	{
+		"name" : "jszip",
+		"url" : "http://stuk.github.io/jszip/"
+	},
+	"files" : [
+		"index.js",
+		"lib/*"
+	],
+	"main" : "jszip",
+	"dependencies" : {
+		"gzip" : ">=1.0.0"
+	},
+	"repository":{
+		"type" : "git",
+		"url" : "http://stuk.github.io/jszip/"
+	}
+}

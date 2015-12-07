@@ -1,0 +1,21 @@
+﻿{
+	"name" : "zip",
+	"version" : "1.0.0",
+	"description" : "对jszip二次封装，使压缩解压缩调用更简单方便。",
+	"keywords" : ["zip", "jszip"],
+	"homepage" : "http://mpi.thinkasp.cn/?/mpi/package/info/zip",
+	"license" : "GPLv3",
+	"author" : 
+	{
+		"name" : "Anlige",
+		"email" : "zhanghuiguoanlige@126.com",
+		"url" : "http://m.thinkasp.cn/"
+	},
+	"files" : [
+		"index.js"
+	],
+	"main" : "zip",
+	"dependencies" :{
+		"jszip" : "1.0.0.0"
+	}
+}

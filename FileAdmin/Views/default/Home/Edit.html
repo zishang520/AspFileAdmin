@@ -1,0 +1,43 @@
+<extend file="../layout/layout.html" />
+<selection name="title">文件管理器-文件夹目录</selection>
+<selection name="header"></selection>
+<selection name="body">
+	<div class="panel panel-primary">
+		<div class="panel-heading"> 
+			<h3 class="panel-title">文件管理器</h3>
+		</div>
+		<div class="panel-body">
+			<div class="btn-group">
+				<button type="button" class="btn btn-default btn-sm dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">选择编码<span class="caret"></span></button>
+				<ul class="dropdown-menu">
+					<li><a href="{$U('Home/Edit','CharSet=1&Path='+\{$@filepath:F.encode\})}">UTF-8</a></li>
+					<li><a href="{$U('Home/Edit','CharSet=2&Path='+\{$@filepath:F.encode\})}">GB2312</a></li>
+					<li><a href="{$U('Home/Edit','CharSet=3&Path='+\{$@filepath:F.encode\})}">GBK</a></li>
+					<li><a href="{$U('Home/Edit','CharSet=4&Path='+\{$@filepath:F.encode\})}">BIG5</a></li>
+				</ul>
+			</div>
+		</div>
+		<a href="{$upath}" class="list-group-item list-group-item-danger"><span class="glyphicon glyphicon-level-up" aria-hidden="true"></span> 上级目录</a>
+		<li class="list-group-item list-group-item-info">文件编辑</li>
+		<form name="input" action="{$U('Home/Edit','CharSet='+\{$@charset\}+'&Path='+\{$@filepath:F.encode\})}" method="POST">
+			<input type="hidden" name="__csrf" value="{$__csrf}">
+			<li class="list-group-item">
+				<button type="submit" class="btn btn-primary btn-xs">保存内容</button>
+				<button type="reset" class="btn btn-warning btn-xs">重置内容</button>
+			</li>
+			<nempty name="info">
+				<div class="alert <eq name="info.status" value="1">alert-success</else>alert-danger</eq> alert-dismissible fade in" role="alert" style="margin-bottom: 0px;">
+					<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">×</span></button>
+					<strong>{$info.info}</strong>
+				</div>
+			</nempty>
+			<div class="form-group">
+				<textarea name="content" class="form-control" rows="20"><nempty name="content">{$content}</nempty></textarea>
+			</div>
+		</form>
+		<div class="panel-footer">
+			<include file="../public/panel_foot.html" />
+		</div>
+	</div>
+</selection>
+<selection name="foot"></selection>

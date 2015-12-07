@@ -1,0 +1,28 @@
+﻿<extend file="../layout/layout.html" />
+<selection name="title">文件管理器-文件夹目录</selection>
+<selection name="header"></selection>
+<selection name="body">
+    <div class="panel panel-primary">
+        <div class="panel-heading">
+            <h3 class="panel-title">文件管理器</h3>
+        </div>
+        <div class="panel-body">
+            <div class="btn-group">
+                <button type="button" class="btn btn-default btn-sm dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">选择编码<span class="caret"></span></button>
+                <ul class="dropdown-menu">
+                    <li><a href="{$U('Home/Show','CharSet=1&Path='+\{$@filepath:F.encode\})}">UTF-8</a></li>
+                    <li><a href="{$U('Home/Show','CharSet=2&Path='+\{$@filepath:F.encode\})}">GB2312</a></li>
+                    <li><a href="{$U('Home/Show','CharSet=3&Path='+\{$@filepath:F.encode\})}">GBK</a></li>
+                    <li><a href="{$U('Home/Show','CharSet=4&Path='+\{$@filepath:F.encode\})}">BIG5</a></li>
+                </ul>
+            </div>
+        </div>
+        <a href="{$upath}" class="list-group-item list-group-item-danger"><span class="glyphicon glyphicon-level-up" aria-hidden="true"></span> 上级目录</a>
+        <li class="list-group-item list-group-item-info">文件查看</li>
+        <pre><nempty name="content">{$content}</else>查看的内容为空或不是所支持的编码</nempty></pre>
+        <div class="panel-footer">
+            <include file="../public/panel_foot.html" />
+        </div>
+    </div>
+</selection>
+<selection name="foot"></selection>

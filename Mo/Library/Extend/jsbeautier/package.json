@@ -1,0 +1,22 @@
+﻿{
+	"name" : "jsbeautier",
+	"version" : "1.0.0",
+	"description" : "js代码美化。",
+	"keywords" : ["jsbeautier"],
+	"homepage" : "https://code.google.com/p/crypto-js/",
+	"license" : "GPLv3",
+	"author" : 
+	{
+		"name" : "Einar Lielmanis",
+		"url" : "http://jsbeautifier.org/",
+		"email" : "einar@jsbeautifier.org"
+	},
+	"files" : [
+		"index.js"
+	],
+	"main" : "jsbeautier",
+	"repository" : {
+		"type" : "svn",
+		"url" : "http://code.google.com/p/jsbeautifier/"
+	}
+}

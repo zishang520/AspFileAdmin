@@ -1,0 +1,16 @@
+﻿{
+	"name" : "loader",
+	"version" : "1.0.0",
+	"description" : "合并多个资源为一个，减少客户端tcp连接数，并支持Gzip压缩。",
+	"keywords" : ["gzip", "loader"],
+	"author" : 
+	{
+		"name" : "anlige",
+		"email" : "zhanghuiguoanlige@126.com",
+		"url" : "http://www.thinkasp.cn/"
+	},
+	"files" : [
+		"index.js"
+	],
+	"main" : "loader"
+}

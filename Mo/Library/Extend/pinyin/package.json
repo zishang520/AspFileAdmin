@@ -1,0 +1,22 @@
+﻿{
+	"name" : "pinyin",
+	"version" : "1.0.1",
+	"description" : "简单的汉字转拼音，忽略同音字。",
+	"keywords" : ["pinyin","汉字","拼音"],
+	"homepage" : "http://mpi.thinkasp.cn/?/mpi/package/info/pinyin",
+	"bugs" : {
+		"url" : "http://mpi.thinkasp.cn/?/mpi/package/info/pinyin",
+		"email" : "zhanghuiguoanlige@126.com"
+	},
+	"license" : "GPLv3",
+	"author" : 
+	{
+		"name" : "anlige",
+		"email" : "zhanghuiguoanlige@126.com",
+		"url" : "http://m.thinkasp.cn/"
+	},
+	"files" : [
+		"index.js"
+	],
+	"main" : "pinyin"
+}

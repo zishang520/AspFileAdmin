@@ -1,0 +1,22 @@
+﻿{
+	"name" : "session",
+	"version" : "1.0.0",
+	"description" : "基于application和url的session机制。",
+	"keywords" : ["session","application"],
+	"homepage" : "http://mpi.thinkasp.cn/?/mpi/package/info/session",
+	"bugs" : {
+		"url" : "http://mpi.thinkasp.cn/?/mpi/package/info/session",
+		"email" : "zhanghuiguoanlige@126.com"
+	},
+	"license" : "GPLv3",
+	"author" : 
+	{
+		"name" : "anlige",
+		"email" : "zhanghuiguoanlige@126.com",
+		"url" : "http://m.thinkasp.cn/"
+	},
+	"files" : [
+		"index.js"
+	],
+	"main" : "session"
+}

@@ -1,0 +1,78 @@
+﻿<extend file="../layout/layout.html" />
+<selection name="title">文件管理器-文件夹目录</selection>
+<selection name="header"></selection>
+<selection name="body">
+    <div class="panel panel-primary">
+        <div class="panel-heading">
+            <h3 class="panel-title">文件管理器</h3>
+        </div>
+        <div class="panel-body">
+            <include file="../public/panel_head.html" />
+        </div>
+        <div class="list-group">
+            <a href="{$upath}" class="list-group-item list-group-item-danger"><span class="glyphicon glyphicon-level-up" aria-hidden="true"></span>&nbsp;上级目录</a>
+            <expression and="files:is_empty eq false" and="directories:is_empty eq false">
+                <nempty name="directories">
+                    <li class="list-group-item list-group-item-success">文件夹列表</li>
+                    <for name="directories">
+                        <li class="list-group-item">
+                            <p>
+                                <label>
+                                    <input type="checkbox" value="{$value.path:F.encode}">
+                                    <a href="{$U('Home/Index','Path='+\{$@value.path:F.encode\})}" style="word-wrap: break-word;"><span class="glyphicon glyphicon-folder-open" aria-hidden="true"></span>&nbsp;{$value.name}</a>
+                                </label>
+                            </p>
+                            <a href="{$U('Home/Directory','Path='+\{$@value.path:F.encode\})}" class="btn btn-xs btn-info">详情</a>
+                            <a href="{$U('Home/RName','Path='+\{$@value.path:F.encode\})}" class="btn btn-xs btn-warning">命名</a>
+                            <a href="{$U('Home/Del','Path='+\{$@value.path:F.encode\})}" class="btn btn-xs btn-danger">删除</a>
+                        </li>
+                    </for>
+                </nempty>
+                <nempty name="files">
+                    <li class="list-group-item list-group-item-warning">文件列表</li>
+                    <for name="files">
+                        <li class="list-group-item">
+                            <p style="word-wrap: break-word;">
+                                <label>
+                                    <input type="checkbox" value="{$value.path:F.encode}">
+                                    <a href="{$U('Home/File','Path='+\{$@value.path:F.encode\})}">
+                                        <span class="glyphicon glyphicon-list-alt" aria-hidden="true"></span>&nbsp;{$value.name}
+                                    </a>
+                                </label>
+                            </p>
+                            <p class="list-group-item-text">
+                                <a href="{$U('Home/Dowload','Path='+\{$@value.path:F.encode\})}" class="btn btn-xs btn-success">下载</a>
+                                <lt name="value.size" value="1024000">
+                                    <eq name="value.type:F.string.endsWith='图像'" value="false">
+                                        <a href="{$U('Home/Show','Path='+\{$@value.path:F.encode\})}" class="btn btn-xs btn-info">查看</a>
+                                        </else>
+                                        <a href="{$U('Home/ShowImage','Path='+\{$@value.path:F.encode\})}" class="btn btn-xs btn-info" target="_blank">打开</a>
+                                    </eq>
+                                    <a href="{$U('Home/Edit','Path='+\{$@value.path:F.encode\})}" class="btn btn-xs btn-primary">编辑</a>
+                                    </else>
+                                    <eq name="value.type:F.string.endsWith='图像'" value="false">
+                                        <a class="btn btn-xs btn-info disabled">查看</a>
+                                        </else>
+                                        <a href="{$U('Home/ShowImage','Path='+\{$@value.path:F.encode\})}" class="btn btn-xs btn-info" target="_blank">打开</a>
+                                    </eq>
+                                    <a class="btn btn-xs btn-primary disabled">编辑</a>
+                                </lt>
+                                <a href="{$U('Home/RName','Path='+\{$@value.path:F.encode\})}" class="btn btn-xs btn-warning">命名</a>
+                                <a href="{$U('Home/Del','Path='+\{$@value.path:F.encode\})}" class="btn btn-xs btn-danger">删除</a>
+                            </p>
+                            [Type:{$value.Type}] [Size:{$value.size:SizeConvert}]
+                        </li>
+                    </for>
+                </nempty>
+                <else />
+                <li class="list-group-item">
+                    <div class="alert alert-warning" role="alert" style="margin-bottom: 0px;">该目录下没有任何文件夹或文件</div>
+                </li>
+            </expression>
+        </div>
+        <div class="panel-footer">
+            <include file="../public/panel_foot.html" />
+        </div>
+    </div>
+</selection>
+<selection name="foot"></selection>

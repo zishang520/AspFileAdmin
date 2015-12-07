@@ -1,0 +1,22 @@
+﻿{
+	"name" : "promise",
+	"version" : "1.0.0",
+	"description" : "promise简单支持。",
+	"keywords" : ["promise"],
+	"homepage" : "http://mpi.thinkasp.cn/?/mpi/package/info/promise",
+	"bugs" : {
+		"url" : "http://mpi.thinkasp.cn/?/mpi/package/info/promise",
+		"email" : "zhanghuiguoanlige@126.com"
+	},
+	"license" : "GPLv3",
+	"author" : 
+	{
+		"name" : "anlige",
+		"email" : "zhanghuiguoanlige@126.com",
+		"url" : "http://m.thinkasp.cn/"
+	},
+	"files" : [
+		"index.js"
+	],
+	"main" : "promise"
+}

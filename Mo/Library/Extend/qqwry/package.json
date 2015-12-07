@@ -1,0 +1,27 @@
+﻿{
+	"name" : "qqwry",
+	"version" : "2.1.0",
+	"description" : "通过IP查询地理位置，使用QQWry数据库。重写并优化查询程序。",
+	"keywords" : ["IP","QQWry"],
+	"homepage" : "http://mpi.thinkasp.cn/?/mpi/package/info/qqwry",
+	"license" : "GPLv3",
+	"author" : 
+	{
+		"name" : "Anlige",
+		"email" : "zhanghuiguoanlige@126.com",
+		"url" : "http://m.thinkasp.cn/"
+	},
+	"files" : [
+		"index.js",
+		"update.js",
+		"update/*"
+	],
+	"extfiles":[
+		{
+			"name" : "qqwry.dat",
+			"description" : "IP数据库，下载解压后，将qqwry.dat放入当前模块目录即可",
+			"url" : "http://mpi.thinkasp.cn/Public/downloads/qqwry.zip"
+		}
+	],
+	"main" : "qqwry"
+}

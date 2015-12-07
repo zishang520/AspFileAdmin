@@ -1,0 +1,22 @@
+﻿{
+	"name" : "dotnet",
+	"version" : "1.0.0",
+	"description" : "封装几个可以在Asp中使用的.Net方法。",
+	"keywords" : ["dotnet"],
+	"homepage" : "http://mpi.thinkasp.cn/?/mpi/package/info/dotnet",
+	"bugs" : {
+		"url" : "http://mpi.thinkasp.cn/?/mpi/package/info/dotnet",
+		"email" : "zhanghuiguoanlige@126.com"
+	},
+	"license" : "GPLv3",
+	"author" : 
+	{
+		"name" : "anlige",
+		"email" : "zhanghuiguoanlige@126.com",
+		"url" : "http://m.thinkasp.cn/"
+	},
+	"files" : [
+		"index.js"
+	],
+	"main" : "dotnet"
+}

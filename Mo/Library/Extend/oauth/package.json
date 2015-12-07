@@ -1,0 +1,25 @@
+﻿{
+	"name" : "oauth",
+	"version" : "1.0.0",
+	"description" : "基于OAUTH 2.0协议的oauth实现。",
+	"keywords" : ["oauth","oauth 2.0"],
+	"homepage" : "http://mpi.thinkasp.cn/?/mpi/package/info/oauth",
+	"bugs" : {
+		"url" : "http://mpi.thinkasp.cn/?/mpi/package/info/oauth",
+		"email" : "zhanghuiguoanlige@126.com"
+	},
+	"license" : "GPLv3",
+	"author" : 
+	{
+		"name" : "anlige",
+		"email" : "zhanghuiguoanlige@126.com",
+		"url" : "http://m.thinkasp.cn/"
+	},
+	"files" : [
+		"index.js"
+	],
+	"dependencies" : {
+		"net" : ">=1.0.0"
+	},
+	"main" : "oauth"
+}

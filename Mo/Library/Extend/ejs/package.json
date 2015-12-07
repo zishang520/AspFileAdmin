@@ -1,0 +1,22 @@
+﻿{
+	"name" : "ejs",
+	"version" : "1.0.1",
+	"description" : "ejs模板引擎，已优化。",
+	"keywords" : ["ejs"],
+	"homepage" : "http://mpi.thinkasp.cn/?/mpi/package/info/ejs",
+	"license" : "GPLv3",
+	"author" : 
+	{
+		"name" : "embeddedjs",
+		"url" : "http://www.embeddedjs.com/"
+	},
+	"files" : [
+		"index.js",
+		"ejs.js"
+	],
+	"main" : "ejs",
+	"repository" : {
+		"type" : "svn",
+		"url" : "http://code.google.com/p/embeddedjavascript/"
+	}
+}

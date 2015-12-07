@@ -1,0 +1,22 @@
+﻿{
+	"name" : "command",
+	"version" : "1.0.0",
+	"description" : "ADO Command的再次封装。",
+	"keywords" : ["command","ado"],
+	"homepage" : "http://mpi.thinkasp.cn/?/mpi/package/info/command",
+	"bugs" : {
+		"url" : "http://mpi.thinkasp.cn/?/mpi/package/info/command",
+		"email" : "zhanghuiguoanlige@126.com"
+	},
+	"license" : "GPLv3",
+	"author" : 
+	{
+		"name" : "anlige",
+		"email" : "zhanghuiguoanlige@126.com",
+		"url" : "http://m.thinkasp.cn/"
+	},
+	"files" : [
+		"index.js"
+	],
+	"main" : "command"
+}
