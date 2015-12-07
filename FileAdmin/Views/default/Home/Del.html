@@ -7,24 +7,24 @@
 			<h3 class="panel-title">文件管理器</h3>
 		</div>
 		<div class="panel-body">
-			
+			hello
 		</div>
 		<a href="{$upath}" class="list-group-item list-group-item-danger"><span class="glyphicon glyphicon-level-up" aria-hidden="true"></span> 上级目录</a>
 		<li class="list-group-item list-group-item-info">文件/文件夹删除</li>
 		<li class="list-group-item">
 			<expression and="content:is_empty eq false">
-				<div class="alert alert-danger alert-dismissible fade in" role="alert">
+				<div class="alert alert-danger alert-dismissible fade in" role="alert" style="margin-bottom: 0px;">
 					<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">×</span></button>
 					<strong>{$content}</strong>
 				</div>
 				<else />
 				<nempty name="info">
-					<div class="alert <eq name="info.status" value="1">alert-success</else>alert-danger</eq> alert-dismissible fade in" role="alert">
+					<div class="alert <eq name="info.status" value="1">alert-success</else>alert-danger</eq> alert-dismissible fade in" role="alert" style="margin-bottom: 0px;">
 						<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">×</span></button>
 						<strong>{$info.info}</strong>
 					</div>
 				</else>
-				<div class="alert alert-warning alert-dismissible fade in" role="alert">
+				<div class="alert alert-warning alert-dismissible fade in" role="alert" style="margin-bottom: 0px;">
 					<h4 id="oh-snap!-you-got-an-error!">警告！！！<a class="anchorjs-link" href="#oh-snap!-you-got-an-error!"><span class="anchorjs-icon"></span></a></h4>
 					<p>即将删除 ”{$filepath:FileName}“ 确认你已经知晓该操作带来的后果！！！！！！</p>
 					<p>
