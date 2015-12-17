@@ -5,21 +5,21 @@
  */
  HomeController = IController.create();
 /**
- * [description]
+ * [磁盘下列表]
  * @Author   ZiShang520
  * @DateTime 2015-10-29T10:18:09+0800
  * @param    {[type]}                 ){	var path,p;	var   gpath [description]
  * @return   {[type]}                         [description]
  */
  HomeController.extend("Index", function(){
- 	var path,p;
- 	var gpath=F.decode(F.get('Path'));
- 	if (!is_empty(gpath) && IO.is(gpath) && IO.directory.exists(gpath)) {
- 		path=gpath;
- 	}else{
- 		path=F.mappath("../");
- 	}
- 	var upaths=IO.parent(path);
+	var path,p;
+	var gpath=F.decode(F.get('Path'));
+	if (!is_empty(gpath) && IO.is(gpath) && IO.directory.exists(gpath)) {
+		path=gpath;
+	}else{
+		path=F.mappath("../");
+	}
+	var upaths=IO.parent(path);
 	var upath=(!is_empty(upaths) && IO.is(upaths) && IO.directory.exists(upaths))?Mo.U('Home/Index','Path='+F.encode(upaths)):Mo.U('Home/Drive');//生成上级路径信息
 	var directories=[];
 	IO.directory.directories(path,function(directorie){
@@ -38,31 +38,31 @@
 	this.display('Home:Index');
 });
 /**
- * [description]
+ * [磁盘目录]
  * @Author   ZiShang520
  * @DateTime 2015-10-29T10:18:18+0800
  * @param    {Array}                  ){	var drives        [description]
  * @return   {[type]}                         [description]
  */
  HomeController.extend("Drive", function(){
- 	var drives=[];
- 	IO.drive.drives(function(drive){
- 		drives.push(drive);
- 	});
- 	this.assign("drives",drives);
- 	this.display('Home:Drive');
+	var drives=[];
+	IO.drive.drives(function(drive){
+		drives.push(drive);
+	});
+	this.assign("drives",drives);
+	this.display('Home:Drive');
  });
 /**
- * [description]
+ * [查看文件]
  * @Author   ZiShang520
  * @DateTime 2015-10-29T10:18:23+0800
  * @param    {[type]}                 ){	var charset,content;	var filepath [description]
  * @return   {[type]}                         [description]
  */
  HomeController.extend("Show", function(){
- 	var charset,content;
- 	var filepath=F.decode(F.get('Path'));
- 	var upaths=IO.parent(filepath);
+	var charset,content;
+	var filepath=F.decode(F.get('Path'));
+	var upaths=IO.parent(filepath);
 	var upath=(!is_empty(upaths) && IO.is(upaths) && IO.directory.exists(upaths))?Mo.U('Home/Index','Path='+F.encode(upaths)):Mo.U('Home/Drive');//生成上级路径信息
 	if (!is_empty(filepath) && IO.is(filepath) && IO.file.exists(filepath)){
 		var file=IO.file.get(filepath);
@@ -83,16 +83,65 @@
 	this.assign("upath",upath);
 	this.display('Home:Show');
 });
+
 /**
- * [description]
+ * [文件上传]
+ * @Author   ZiShang520
+ * @DateTime 2015-12-09T23:47:05+0800
+ * @param    {[type]}                 ){} [description]
+ * @return   {[type]}                       [description]
+ */
+ HomeController.extend("Upload",function(){
+	var upload = require("net/upload");//引入上传模块
+	var content,info;
+	var filepath=F.decode(F.get('Path'));
+	// var upaths=IO.parent(filepath);
+	var upath=(!is_empty(filepath) && IO.is(filepath) && IO.directory.exists(filepath))?Mo.U('Home/Index','Path='+F.encode(filepath)):Mo.U('Home/Drive');//生成路径信息
+	if (!is_empty(filepath) && IO.is(filepath) && IO.directory.exists(filepath)){
+		if (is_post()) {
+			upload({
+				AllowFileTypes : "*", /*only these extensions can be uploaded.*/
+				AllowMaxSize : "4Mb", /*max upload-data size*/
+				Charset : "utf-8", /*client text charset*/
+				SavePath : filepath, /*dir that files will be saved in it.*/
+				RaiseServerError : false /* when it is false, don not push exception to Global ExceptionManager, just save in F.exports.upload.exception.*/,
+				OnError:function(e,cfg){ /*event, on some errors are raised. */
+					info = {'info':e,'status':0};
+				},
+				OnSucceed:function(cfg){
+					var filesnum=this.files.length;
+					this.save("upfile", {
+						Type : UploadSaveType.NONE,
+						OnError : function(e){
+							info = {'info':e,'status':0};
+						},
+						OnSucceed : function(count,files){
+							info = {'info':'文件:'+F.post('upfile')+'共'+filesnum+'个文件上传完成','status':1};
+						}
+					});
+				}
+			});
+		}
+	}else{
+		content='目标文件夹不存在';
+	}
+	this.assign("info",info);
+	this.assign('filepath',filepath);
+	this.assign("content",content);
+	this.assign("upath",upath);
+	this.display('Home:Upload');
+});
+
+/**
+ * [下载]
  * @Author   ZiShang520
  * @DateTime 2015-10-29T10:18:31+0800
  * @param    {[type]}                 ){	var filepath      [description]
  * @return   {[type]}                         [description]
  */
  HomeController.extend("Dowload", function(){
- 	var filepath=F.decode(F.get('Path'));
- 	var upaths=IO.parent(filepath);
+	var filepath=F.decode(F.get('Path'));
+	var upaths=IO.parent(filepath);
 	var upath=(!is_empty(upaths) && IO.is(upaths) && IO.directory.exists(upaths))?Mo.U('Home/Index','Path='+F.encode(upaths)):Mo.U('Home/Drive');//生成上级路径信息
 	if (!is_empty(filepath) && IO.is(filepath) && IO.file.exists(filepath)){
 		var range=F.server('HTTP_RANGE'),inits,stops;
@@ -143,7 +192,7 @@
 					Response.Flush();
 				}
 			}
-			stream.close();		
+			stream.close();
 			stream = null;
 		}else{
 			this.assign('content','请求参数不合法');
@@ -157,15 +206,15 @@
 	}
 });
 /**
- * [description]
+ * [查看图片]
  * @Author   ZiShang520
  * @DateTime 2015-10-29T10:18:37+0800
  * @param    {[type]}                 ){	var filepath      [description]
  * @return   {[type]}                         [description]
  */
  HomeController.extend("ShowImage", function(){
- 	var filepath=F.decode(F.get('Path'));
- 	var upaths=IO.parent(filepath);
+	var filepath=F.decode(F.get('Path'));
+	var upaths=IO.parent(filepath);
 	var upath=(!is_empty(upaths) && IO.is(upaths) && IO.directory.exists(upaths))?Mo.U('Home/Index','Path='+F.encode(upaths)):Mo.U('Home/Drive');//生成上级路径信息
 	if (!is_empty(filepath) && IO.is(filepath) && IO.file.exists(filepath)){
 		var file=IO.file.get(filepath);
@@ -202,17 +251,17 @@
 	}
 });
 /**
- * [description]
+ * [编辑文件]
  * @Author   ZiShang520
  * @DateTime 2015-10-29T10:18:43+0800
  * @param    {[type]}                 ){	var charset,content,info;	var filepath [description]
  * @return   {[type]}                         [description]
  */
  HomeController.extend("Edit",function(){
- 	var charset,content,info;
- 	var filepath=F.decode(F.get('Path'));
- 	var charsetint=F.get.int("CharSet",1);
- 	var upaths=IO.parent(filepath);
+	var charset,content,info;
+	var filepath=F.decode(F.get('Path'));
+	var charsetint=F.get.int("CharSet",1);
+	var upaths=IO.parent(filepath);
 	var upath=(!is_empty(upaths) && IO.is(upaths) && IO.directory.exists(upaths))?Mo.U('Home/Index','Path='+F.encode(upaths)):Mo.U('Home/Drive');//生成上级路径信息
 	if (!is_empty(filepath) && IO.is(filepath) && IO.file.exists(filepath)){
 		var file=IO.file.get(filepath);
@@ -243,16 +292,16 @@
 	this.display('Home:Edit');
 });
 /**
- * [description]
+ * [重命名]
  * @Author   ZiShang520
  * @DateTime 2015-10-29T10:18:49+0800
  * @param    {[type]}                 ){	var content,info;	var filepath [description]
  * @return   {[type]}                         [description]
  */
  HomeController.extend("RName",function(){
- 	var content,info;
- 	var filepath=F.decode(F.get('Path'));
- 	var upaths=IO.parent(filepath);
+	var content,info;
+	var filepath=F.decode(F.get('Path'));
+	var upaths=IO.parent(filepath);
 	var upath=(!is_empty(upaths) && IO.is(upaths) && IO.directory.exists(upaths))?Mo.U('Home/Index','Path='+F.encode(upaths)):Mo.U('Home/Drive');//生成上级路径信息
 	if (!is_empty(filepath) && IO.is(filepath) && (IO.file.exists(filepath) || IO.directory.exists(filepath))){
 		if (is_post()) {
@@ -294,16 +343,16 @@
 	this.display('Home:RName');
 });
 /**
- * [description]
+ * [删除文件/文件夹]
  * @Author   ZiShang520
  * @DateTime 2015-10-29T10:18:54+0800
  * @param    {[type]}                 ){	var content,info;	var filepath [description]
  * @return   {[type]}                         [description]
  */
  HomeController.extend("Del",function(){
- 	var content,info;
- 	var filepath=F.decode(F.get('Path'));
- 	var upaths=IO.parent(filepath);
+	var content,info;
+	var filepath=F.decode(F.get('Path'));
+	var upaths=IO.parent(filepath);
 	var upath=(!is_empty(upaths) && IO.is(upaths) && IO.directory.exists(upaths))?Mo.U('Home/Index','Path='+F.encode(upaths)):Mo.U('Home/Drive');//生成上级路径信息
 	if (!is_empty(filepath) && IO.is(filepath) && (IO.file.exists(filepath) || IO.directory.exists(filepath))){
 		if (is_post()) {
@@ -332,8 +381,14 @@
 	this.assign("upath",upath);
 	this.display('Home:Del');
 });
-
-HomeController.extend("Create",function(){
+/**
+ * [创建文件/文件夹]
+ * @Author   ZiShang520
+ * @DateTime 2015-12-09T23:43:44+0800
+ * @param    {[type]}                 ){	var content,info;	var filepath [description]
+ * @return   {[type]}                         [description]
+ */
+ HomeController.extend("Create",function(){
 	var content,info;
 	var filepath=F.decode(F.get('Path'));
 	// var upaths=IO.parent(filepath);
@@ -379,16 +434,16 @@ HomeController.extend("Create",function(){
 	this.display('Home:Create');
 });
 /**
- * [description]
+ * [目录详情]
  * @Author   ZiShang520
  * @DateTime 2015-10-29T10:18:58+0800
  * @param    {[type]}                 ){	var directory,content;	var filepath [description]
  * @return   {[type]}                         [description]
  */
  HomeController.extend("Directory",function(){
- 	var directory,content;
- 	var filepath=F.decode(F.get('Path'));
- 	var upaths=IO.parent(filepath);
+	var directory,content;
+	var filepath=F.decode(F.get('Path'));
+	var upaths=IO.parent(filepath);
 	var upath=(!is_empty(upaths) && IO.is(upaths) && IO.directory.exists(upaths))?Mo.U('Home/Index','Path='+F.encode(upaths)):Mo.U('Home/Drive');//生成上级路径信息
 	if (!is_empty(filepath) && IO.is(filepath) && IO.directory.exists(filepath)){
 		try{
@@ -405,16 +460,16 @@ HomeController.extend("Create",function(){
 	this.display('Home:Directory');
 });
 /**
- * [description]
+ * [文件详情]
  * @Author   ZiShang520
  * @DateTime 2015-10-29T10:19:04+0800
  * @param    {[type]}                 ){	var file,content;	var filepath [description]
  * @return   {[type]}                         [description]
  */
  HomeController.extend("File",function(){
- 	var file,content;
- 	var filepath=F.decode(F.get('Path'));
- 	var upaths=IO.parent(filepath);
+	var file,content;
+	var filepath=F.decode(F.get('Path'));
+	var upaths=IO.parent(filepath);
 	var upath=(!is_empty(upaths) && IO.is(upaths) && IO.directory.exists(upaths))?Mo.U('Home/Index','Path='+F.encode(upaths)):Mo.U('Home/Drive');//生成上级路径信息
 	if (!is_empty(filepath) && IO.is(filepath) && IO.file.exists(filepath)){
 		try{
@@ -431,6 +486,31 @@ HomeController.extend("Create",function(){
 	this.display('Home:File');
 });
 /**
+ * [终端模拟]
+ * @Author   ZiShang520
+ * @DateTime 2015-12-17T23:18:55+0800
+ * @param    {ActiveXObject}          ){	dump(IO.build('E:'));	var shell [description]
+ * @return   {[type]}                     [description]
+ */
+HomeController.extend("Shell",function(){
+	var content,shell;
+	var filepath=F.decode(F.get('Path'));
+	var upath=(!is_empty(filepath) && IO.is(filepath) && IO.directory.exists(filepath))?Mo.U('Home/Index','Path='+F.encode(filepath)):Mo.U('Home/Drive');//生成上级路径信息
+	if (is_post()) {
+		shell = F.post('shell');
+		if(!is_empty(shell)){
+			var cmd='cmd.exe /c '+F.string.trim(shell);
+			var S = new ActiveXObject("WScript.Shell");
+			content=S.exec(cmd).StdOut.ReadAll();
+		}
+	}
+	this.assign("shell",shell);
+	this.assign("content",content);
+	this.assign("filepath",filepath);
+	this.assign("upath",upath);
+	this.display('Home:Shell');
+});
+/**
  * [description]
  * @Author   ZiShang520
  * @DateTime 2015-10-29T10:19:09+0800
@@ -438,6 +518,8 @@ HomeController.extend("Create",function(){
  * @return   {[type]}                                             [description]
  */
  HomeController.extend("test",function(){
- 	dump(IO.build('E:'));
+	dump(IO.build('E:'));
+	var shell = new ActiveXObject("WScript.Shell");
+	dump(shell.exec("cmd.exe /c ").StdOut.ReadAll());
  });
 </script>

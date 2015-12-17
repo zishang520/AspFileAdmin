@@ -1,0 +1,31 @@
+*::selection {
+    background-color: #EECFA1;
+}
+
+*::-moz-selection {
+    background-color: #EECFA1;
+}
+
+.file {
+    position: relative;
+    padding: 4px 12px;
+    overflow: hidden;
+    cursor: pointer;
+}
+
+.file input {
+    position: absolute;
+    font-size: 100px;
+    right: 0;
+    top: 0;
+    opacity: 0;
+    width: 72px !important;
+    cursor: pointer;
+}
+
+.file:hover {
+    color: #333;
+    background-color: #e6e6e6;
+    border-color: #adadad;
+    text-decoration: none;
+}

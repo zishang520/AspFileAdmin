@@ -1,9 +1,9 @@
 ﻿{
 	"name" : "ga",
-	"version" : "1.0.0",
-	"description" : "GoogleAuthenticator插件。",
+	"version" : "2.1.0",
+	"description" : "GoogleAuthenticator插件。2.1.0-优化。",
 	"keywords" : ["GoogleAuthenticator"],
-	"homepage" : "http://www.thinkasp.cn/",
+	"homepage" : "http://www.thinkasp.cn/extend/ga/",
 	"license" : "GPLv3",
 	"author" : 
 	{

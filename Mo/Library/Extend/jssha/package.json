@@ -1,0 +1,20 @@
+﻿{
+	"name" : "jsSHA",
+	"version" : "1.0.0",
+	"description" : "用于javascript的各种SHA算法，包括SHA1,SHA224,SHA256,SHA384,SHA512以及其HMAC算法。",
+	"keywords" : ["jsSHA"],
+	"homepage" : "https://github.com/Caligatio/jsSHA",
+	"author" : 
+	{
+		"name" : "Caligatio",
+		"url" : "https://github.com/Caligatio/jsSHA"
+	},
+	"files" : [
+		"index.js"
+	],
+	"main" : "jsSHA",
+	"repository":{
+		"type" : "git",
+		"url" : "https://github.com/Caligatio/jsSHA"
+	}
+}

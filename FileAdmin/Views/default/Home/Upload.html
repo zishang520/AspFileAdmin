@@ -10,7 +10,7 @@
 			hello world
 		</div>
 		<a href="{$upath}" class="list-group-item list-group-item-danger"><span class="glyphicon glyphicon-level-up" aria-hidden="true"></span> 返回目录</a>
-		<li class="list-group-item list-group-item-info">创建文件/文件夹</li>
+		<li class="list-group-item list-group-item-info">文件上传</li>
 		<li class="list-group-item">
 			<expression and="content:is_empty eq false">
 				<div class="alert alert-danger alert-dismissible fade in" role="alert" style="margin-bottom: 0px;">
@@ -29,20 +29,13 @@
 						<strong>{$error.info}</strong>
 					</div>
 				</nempty>
-				<form name="input" action="{$U('Home/Create','Path='+\{$@filepath:F.encode\})}" method="POST" class="form-inline">
-					<input type="hidden" name="__csrf" value="{$__csrf}">
-					<div class="form-group">
-						<label for="exampleNewClass2">类型</label>
-						<select class="form-control" name="type" id='exampleNewClass2'>
-							<option value="1">创建文件夹</option>
-							<option value="2">创建文件</option>
-						</select>
+				<form name="input" action="{$U('Home/Upload','Path='+\{$@filepath:F.encode\})}" method="post" class="form-inline" enctype="multipart/form-data">
+					<label for="exampleInputFile" class="control-label">文件</label>
+					<div class="file form-control input-sm">
+						<label for="exampleInputFile" class="control-label">选择文件</label>
+						<input type="file" name="upfile" class="form-control input-sm" id="exampleInputFile" placeholder="文件" multiple="multiple">
 					</div>
-					<div class="form-group">
-						<label for="exampleNewName2">文件夹/文件名</label>
-						<input type="text" name="newnames" class="form-control input-sm" id="exampleNewName2" placeholder="文件夹/文件名" value="{$filepath:FileName}">
-					</div>
-					<button type="submit" class="btn btn-default btn-sm">提交内容</button>
+					<button type="submit" class="btn btn-info btn-sm">上传文件</button>
 				</form>
 			</expression>
 		</li>

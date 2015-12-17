@@ -80,17 +80,16 @@ function Word2Bytes(word){
 	return [word>>>24, (word >>16) & 0xff, (word >>8) & 0xff, word & 0xff];
 }
 function Bytes2Word(bytes){
-	return bytes[0] * Math.pow(256, 3) + bytes[1] * Math.pow(256, 2) + bytes[2] * 256 + bytes[3];
+	return (bytes[0] << 24) + (bytes[1] << 16) + (bytes[2] << 8) + bytes[3];
 }
-function GoogleAuthenticator(secret){
-	var _secret = secret || "", _code_length = 6, _rnd_seeds = base32_loopup_table.slice(0,32).join("");
-	_secret = _secret.toUpperCase();
+(function (){
+	var _code_length = 6, _rnd_seeds = base32_loopup_table.slice(0,32).join("");
 	function create_secret(len){
 		return F.random.initialize(_rnd_seeds, len || 16);
 	}
 	function get_code(secret_, time_slice){
 		time_slice = time_slice || Math.floor(+new Date() / 30000);
-		secret_ = base32_decode(_secret || secret_);
+		secret_ = base32_decode(secret_);
 
 		var time = [0,0,0,0];
 		Array.prototype.push.apply(time, Word2Bytes(time_slice));
@@ -106,13 +105,13 @@ function GoogleAuthenticator(secret){
 	}
 	function get_qrcode_url(name, secret, title){
 		//otpauth://totp/Google:xxxxx?secret=xxxxxx&issuer=Google
-        var urlencoded = 'otpauth://totp/' + name + '?secret=' + secret;
+        var urlencoded = 'otpauth://totp/Google:' + name + '?secret=' + secret;
 		if(title) urlencoded += '&issuer=' + title;
         return 'https://chart.googleapis.com/chart?chs=200x200&chld=M|0&cht=qr&chl=' + F.encode(urlencoded);		
 	}
 	function verify($secret, $code, $discrepancy, $currentTimeSlice){
         if (!$currentTimeSlice) {
-            $currentTimeSlice = floor(time() / 30);
+            $currentTimeSlice = Math.floor(+new Date() / 30000);
         }
         var $i;
         $discrepancy = $discrepancy || 1;
@@ -123,11 +122,11 @@ function GoogleAuthenticator(secret){
         }
         return false;
 	}
-	return {
+	module.exports = {
 		create_secret : create_secret,
 		get_code : get_code,
 		get_qrcode_url : get_qrcode_url,
-		set_code_length : function(len){ _code_length = len;}
+		set_code_length : function(len){ _code_length = len;},
+		verify : verify
 	};
-}
-return GoogleAuthenticator;
+})();

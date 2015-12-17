@@ -1,0 +1,30 @@
+<extend file="../layout/layout.html" />
+<selection name="title">文件管理器-文件夹目录</selection>
+<selection name="header"></selection>
+<selection name="body">
+	<div class="panel panel-primary">
+		<div class="panel-heading"> 
+			<h3 class="panel-title">文件管理器</h3>
+		</div>
+		<div class="panel-body">
+
+		</div>
+		<a href="{$upath}" class="list-group-item list-group-item-danger"><span class="glyphicon glyphicon-level-up" aria-hidden="true"></span> 返回目录</a>
+		<li class="list-group-item list-group-item-info">终端模拟</li>
+		<form name="input" action="{$U('Home/Shell','&Path='+\{$@filepath:F.encode\})}" method="POST">
+			<input type="hidden" name="__csrf" value="{$__csrf}">
+			<li class="list-group-item">
+				<button type="submit" class="btn btn-primary btn-xs">执行命令</button>
+				<button type="reset" class="btn btn-warning btn-xs">重置内容</button>
+			</li>
+			<div class="form-group">
+				<textarea name="shell" class="form-control" rows="3"><nempty name="shell">{$shell}</nempty></textarea>
+			</div>
+		</form>
+        <pre><nempty name="content">{$content}</else>返回内容为空</nempty></pre>
+		<div class="panel-footer">
+			<include file="../public/panel_foot.html" />
+		</div>
+	</div>
+</selection>
+<selection name="foot"></selection>
