@@ -1,0 +1,12 @@
+﻿{
+	"name" : "mail",
+	"version" : "1.0.0",
+	"description" : "提供邮件发送支持。",
+	"keywords" : ["mail"],
+	"homepage" : "http://zishang520.com",
+	"license" : "GPLv3",
+	"files" : [
+		"index.js"
+	],
+	"main" : "mail/index"
+}

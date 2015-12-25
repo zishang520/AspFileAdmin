@@ -63,7 +63,7 @@
  		bytesize = parseInt((bytes / 1024) * 1000) / 1000;
  		size = bytesize + " KB";
  	} else {
- 		size = bytes + "B"
+ 		size = bytes + " Byte"
  	}
  	return size;
  }

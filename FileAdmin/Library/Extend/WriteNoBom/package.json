@@ -1,0 +1,12 @@
+﻿{
+	"name" : "WriteNoBom",
+	"version" : "1.0.0",
+	"description" : "保存去除Bom",
+	"keywords" : ["WriteNoBom"],
+	"homepage" : "http://zishang520.com",
+	"license" : "GPLv3",
+	"files" : [
+		"index.js"
+	],
+	"main" : "WriteNoBom/index"
+}
