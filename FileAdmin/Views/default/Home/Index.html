@@ -60,17 +60,21 @@
                                         <p class="list-group-item-text">
                                             <a href="{$U('Home/Dowload','Path='+\{$@value.path:F.encode\})}" class="btn btn-xs btn-success">下载</a>
                                             <lt name="value.size" value="1024000">
-                                                <eq name="value.type:F.string.endsWith='图像'" value="false">
-                                                    <a href="{$U('Home/Show','Path='+\{$@value.path:F.encode\})}" class="btn btn-xs btn-info">查看</a>
-                                                    </else>
+                                                <eq name="value.type:F.string.endsWith='图像'" value="true">
                                                     <a href="{$U('Home/ShowImage','Path='+\{$@value.path:F.encode\})}" class="btn btn-xs btn-info" target="_blank">打开</a>
+                                                    <else and="value.name:F.string.test=/zip$/i eq true" />
+                                                    <a href="{$U('Home/Unzip','Path='+\{$@value.path:F.encode\})}" class="btn btn-xs btn-info">解压</a>
+                                                    </else>
+                                                    <a href="{$U('Home/Show','Path='+\{$@value.path:F.encode\})}" class="btn btn-xs btn-info">查看</a>
                                                 </eq>
                                                 <a href="{$U('Home/Edit','Path='+\{$@value.path:F.encode\})}" class="btn btn-xs btn-primary">编辑</a>
                                                 </else>
-                                                <eq name="value.type:F.string.endsWith='图像'" value="false">
-                                                    <a class="btn btn-xs btn-info disabled">查看</a>
-                                                    </else>
+                                                <eq name="value.type:F.string.endsWith='图像'" value="true">
                                                     <a href="{$U('Home/ShowImage','Path='+\{$@value.path:F.encode\})}" class="btn btn-xs btn-info" target="_blank">打开</a>
+                                                    <else and="value.name:F.string.test=/zip$/i eq true" />
+                                                    <a class="btn btn-xs btn-info disabled">解压</a>
+                                                    </else>
+                                                    <a class="btn btn-xs btn-info disabled">查看</a>
                                                 </eq>
                                                 <a class="btn btn-xs btn-primary disabled">编辑</a>
                                             </lt>

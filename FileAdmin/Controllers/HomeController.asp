@@ -345,7 +345,7 @@ HomeController.extend("RName", function() {
     if (!is_empty(filepath) && IO.is(filepath) && (IO.file.exists(filepath) || IO.directory.exists(filepath))) {
         if (is_post()) {
             var newnames = F.post('newname');
-            if (!is_empty(newnames) && F.string.exp(newnames, /[\/|\\|\:|\*|\?|\"|\<|\>|\|]/) != newnames) { //"//为了好看
+            if (!is_empty(newnames) && !F.string.test(newnames, /[\/|\\|\:|\*|\?|\"|\<|\>|\|]/g)) { //"//为了好看
                 var newname = IO.build(upaths, newnames);
                 if (IO.file.exists(filepath)) { //
                     if (IO.file.move(filepath, newname) !== false) {
@@ -469,7 +469,7 @@ HomeController.extend("Create", function() {
         if (is_post()) {
             var type = F.post.int('type', 0);
             var newfilepath = F.post('newnames');
-            if (!is_empty(newfilepath) && F.string.exp(newfilepath, /[\/|\\|\:|\*|\?|\"|\<|\>|\|]/) != newfilepath) { //"//为了好看
+            if (!is_empty(newfilepath) && !F.string.test(newfilepath, /[\/|\\|\:|\*|\?|\"|\<|\>|\|]/)) { //"//为了好看
                 var newnames = IO.build(filepath, newfilepath); //
                 if (!IO.file.exists(newnames) && !IO.directory.exists(newnames)) { //
                     if (type == 1) {
@@ -607,29 +607,40 @@ HomeController.extend("Shell", function() {
  */
 HomeController.extend("Unzip", function() {
     var Zip = require("zip"); //引入zip组件
-    var content;
+    var content,info;
     var filepath = F.decode(F.get('Path'));
     var upaths = IO.parent(filepath);
     var upath = (!is_empty(upaths) && IO.is(upaths) && IO.directory.exists(upaths)) ? Mo.U('Home/Index', 'Path=' + F.encode(upaths)) : Mo.U('Home/Drive'); //生成上级路径信息
     if (!is_empty(filepath) && IO.is(filepath) && IO.file.exists(filepath)) {
         var file = IO.file.get(filepath);
-        if (F.string.endsWith(file.type, 'ZIP 压缩文件')) {
+        var fp = IO.file.open(filepath,{forText:true,forRead:true});
+        var txt = IO.file.read(fp,2);
+        IO.file.close(fp);
+        if (F.string.test(file.type, /zip/gi) && txt=='PK') {
             if (is_post()) {
                 var unpath = !is_empty(F.post('unpath')) ? F.post('unpath') : upaths;
                 try {
                     Zip.unZip(filepath, unpath, {
                         base64: true
                     });
+                    info = {
+                            'info': '文件解压成功',
+                            'status': 1
+                        };
                 } catch (ex) {
-                    dump(ex);
+                    info = {
+                            'info': '文件解压失败:'+ex,
+                            'status': 0
+                        };
                 }
             }
         } else {
-            content = '该文件不是ZIP 压缩文件，请确认文件类型';
+            content = '该文件不是ZIP压缩文件，请确认文件类型';
         }
     } else {
         content = '目标文件不存在';
     }
+    this.assign('info',info);
     this.assign("filepath", filepath);
     this.assign("upaths", upaths);
     this.assign("content", content);

@@ -18,13 +18,13 @@
 				</div>
 				<else />
 				<nempty name="info">
-					<div class="alert <eq name="info.status" value="1">alert-success</else>alert-danger</eq> alert-dismissible fade in" role="alert">
+					<div class="alert <eq name="info.status" value="1">alert-success</else>alert-danger</eq> alert-dismissible fade in" role="alert" style="margin-bottom: 0px;">
 						<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">×</span></button>
 						<strong>{$info.info}</strong>
 					</div>
 				</nempty>
 				<nempty name="error">
-					<div class="alert <eq name="error.status" value="1">alert-success</else>alert-danger</eq> alert-dismissible fade in" role="alert">
+					<div class="alert <eq name="error.status" value="1">alert-success</else>alert-danger</eq> alert-dismissible fade in" role="alert" style="margin-bottom: 0px;">
 						<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">×</span></button>
 						<strong>{$error.info}</strong>
 					</div>

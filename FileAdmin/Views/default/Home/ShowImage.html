@@ -2,23 +2,24 @@
 <selection name="title">文件管理器-文件夹目录</selection>
 <selection name="header"></selection>
 <selection name="body">
-	<div class="panel panel-primary">
-		<div class="panel-heading"> 
-			<h3 class="panel-title">文件管理器</h3>
-		</div>
-		<div class="panel-body">
-			
-		</div>
-		<a href="{$upath}" class="list-group-item list-group-item-danger"><span class="glyphicon glyphicon-level-up" aria-hidden="true"></span> 返回目录</a>
-		<li class="list-group-item list-group-item-info">图片查看</li>
-		<nempty name="content">
-			<div class="alert alert-danger alert-dismissible fade in" role="alert">
-				<strong>{$content}</strong>
-			</div>
-		</nempty>
-		<div class="panel-footer">
-			<include file="../public/panel_foot.html" />
-		</div>
-	</div>
+    <div class="panel panel-primary">
+        <div class="panel-heading">
+            <h3 class="panel-title">文件管理器</h3>
+        </div>
+        <div class="panel-body">
+        </div>
+        <a href="{$upath}" class="list-group-item list-group-item-danger"><span class="glyphicon glyphicon-level-up" aria-hidden="true"></span> 返回目录</a>
+        <li class="list-group-item list-group-item-info">图片查看</li>
+        <li class="list-group-item">
+            <nempty name="content">
+                <div class="alert alert-danger alert-dismissible fade in" role="alert" style="margin-bottom: 0px;">
+                    <strong>{$content}</strong>
+                </div>
+            </nempty>
+        </li>
+        <div class="panel-footer">
+            <include file="../public/panel_foot.html" />
+        </div>
+    </div>
 </selection>
 <selection name="foot"></selection>
