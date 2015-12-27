@@ -158,56 +158,61 @@ HomeController.extend("Dowload", function() {
         var range = F.server('HTTP_RANGE'),
             inits, stops;
         var file = IO.file.get(filepath);
-        if (!is_empty(range)) {
-            var byt = F.string.matches(range, /bytes\=(\d+)?-(\d+)?/ig);
-            if (byt.length > 0) {
-                inits = !is_empty(byt[0][1]) ? parseInt(byt[0][1]) : 0;
-                if (inits == 0) {
-                    stops = file.size - 1;
-                } else if (inits > 0 && is_empty(byt[0][2])) {
-                    stops = file.size - 1;
+        if (file.size>0) {
+            if (!is_empty(range)) {
+                var byt = F.string.matches(range, /bytes\=(\d+)?-(\d+)?/ig);
+                if (byt.length > 0) {
+                    inits = !is_empty(byt[0][1]) ? parseInt(byt[0][1]) : 0;
+                    if (inits == 0) {
+                        stops = file.size - 1;
+                    } else if (inits > 0 && is_empty(byt[0][2])) {
+                        stops = file.size - 1;
+                    } else {
+                        stops = (!is_empty(byt[0][2]) && inits < (parseInt(byt[0][2]))) ? parseInt(byt[0][2]) : file.size - 1;
+                    }
                 } else {
-                    stops = (!is_empty(byt[0][2]) && inits < (parseInt(byt[0][2]))) ? parseInt(byt[0][2]) : file.size - 1;
+                    inits = 0;
+                    stops = file.size - 1;
                 }
             } else {
                 inits = 0;
                 stops = file.size - 1;
             }
-        } else {
-            inits = 0;
-            stops = file.size - 1;
-        }
-        if (stops <= file.size) {
-            Response.Buffer = true; //开启缓存完毕输出
-            Response.Clear(); //清除缓存
-            var stream = new ActiveXObject("ADODB.Stream"); //解决下载限制
-            stream.Mode = 3; //读写模式
-            stream.Type = 1; //二进制
-            stream.Open();
-            stream.LoadFromFile(filepath);
-            stream.Position = inits; //流指针
-            // stream.SetEOS = stops;
-            Response.Status = "206 Partial Content";
-            Response.ContentType = "application/octet-stream";
-            Response.AddHeader('Accept-Ranges', 'bytes');
-            Response.AddHeader("Content-Disposition", "attachment; filename=\"" + file.name + "\"");
-            Response.AddHeader("Content-Range", "bytes " + inits + "-" + stops + "/" + file.size);
-            Response.AddHeader("Content-Length", stops - inits + 1);
-            if (file.size <= 4096000) {
-                binstr = stream.Read(stops);
-                Response.BinaryWrite(binstr);
-                Response.Flush();
-            } else {
-                while (!stream.EOS) {
-                    binstr = stream.Read(4096000);
+            if (stops <= file.size) {
+                Response.Buffer = true; //开启缓存完毕输出
+                Response.Clear(); //清除缓存
+                var stream = new ActiveXObject("ADODB.Stream"); //解决下载限制
+                stream.Mode = 3; //读写模式
+                stream.Type = 1; //二进制
+                stream.Open();
+                stream.LoadFromFile(filepath);
+                stream.Position = inits; //流指针
+                Response.Status = "206 Partial Content";
+                Response.ContentType = "application/octet-stream";
+                Response.AddHeader('Accept-Ranges', 'bytes');
+                Response.AddHeader("Content-Disposition", "attachment; filename=\"" + file.name + "\"");
+                Response.AddHeader("Content-Range", "bytes " + inits + "-" + stops + "/" + file.size);
+                Response.AddHeader("Content-Length", stops - inits + 1);
+                if (file.size <= 4096000) {
+                    binstr = stream.Read(file.size);
                     Response.BinaryWrite(binstr);
                     Response.Flush();
+                } else {
+                    while (!stream.EOS) {
+                        binstr = stream.Read(4096000);
+                        Response.BinaryWrite(binstr);
+                        Response.Flush();
+                    }
                 }
+                stream.close();
+                stream = null;
+            } else {
+                this.assign('content', '请求参数不合法');
+                this.assign("upath", upath);
+                this.display('Home:Dowload');
             }
-            stream.close();
-            stream = null;
         } else {
-            this.assign('content', '请求参数不合法');
+            this.assign('content', '该文件为空不能下载');
             this.assign("upath", upath);
             this.display('Home:Dowload');
         }
