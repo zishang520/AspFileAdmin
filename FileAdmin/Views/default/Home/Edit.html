@@ -1,9 +1,62 @@
 <extend file="../layout/layout.html" />
 <selection name="title">文件管理器-文件夹目录</selection>
-<selection name="header"></selection>
+<selection name="header">
+	<link rel="stylesheet" href="FileAdminIndex/code/lib/codemirror.css">
+	<link rel="stylesheet" href="FileAdminIndex/code/addon/fold/foldgutter.css">
+	<link rel="stylesheet" href="FileAdminIndex/code/addon/dialog/dialog.css">
+	<link rel="stylesheet" href="FileAdminIndex/code/theme/monokai.css">
+	<script src="FileAdminIndex/code/lib/codemirror.js"></script>
+	<script src="FileAdminIndex/code/addon/search/searchcursor.js"></script>
+	<script src="FileAdminIndex/code/addon/search/search.js"></script>
+	<script src="FileAdminIndex/code/addon/dialog/dialog.js"></script>
+	<script src="FileAdminIndex/code/addon/edit/matchbrackets.js"></script>
+	<script src="FileAdminIndex/code/addon/edit/closebrackets.js"></script>
+	<script src="FileAdminIndex/code/addon/comment/comment.js"></script>
+	<script src="FileAdminIndex/code/addon/wrap/hardwrap.js"></script>
+	<script src="FileAdminIndex/code/addon/fold/foldcode.js"></script>
+	<script src="FileAdminIndex/code/addon/fold/brace-fold.js"></script>
+	<script src="FileAdminIndex/code/mode/htmlembedded/htmlembedded.js"></script>
+	<script src="FileAdminIndex/code/mode/javascript/javascript.js"></script>
+	<script src="FileAdminIndex/code/mode/xml/xml.js"></script>
+	<script src="FileAdminIndex/code/mode/markdown/markdown.js"></script>
+	<script src="FileAdminIndex/code/mode/css/css.js"></script>
+	<script src="FileAdminIndex/code/mode/vbscript/vbscript.js"></script>
+	<script src="FileAdminIndex/code/mode/htmlmixed/htmlmixed.js"></script>
+	<script src="FileAdminIndex/code/mode/vb/vb.js"></script>
+	<script src="FileAdminIndex/code/keymap/sublime.js"></script>
+	<style type="text/css">
+		.CodeMirror {border-top: 1px solid #eee; border-bottom: 1px solid #eee; line-height: 1.3; height: 500px;}
+		.CodeMirror-linenumbers { padding: 0 8px;}
+	</style>
+	<script type="text/javascript">
+		$(document).ready(function(){
+			var mixedMode = {
+				name: "htmlmixed",
+				scriptTypes: [{
+					matches: /\/x-handlebars-template|\/x-mustache/i,
+					mode: null
+				},
+				{
+					matches: /(text|application)\/(x-)?vb(a|script)/i,
+					mode: "vbscript"
+				}]
+			};
+			var myCodeMirror = CodeMirror.fromTextArea(document.getElementById('content'),{
+				mode: mixedMode,
+				tabSize:4,
+				lineNumbers: true,
+				keyMap: "sublime",
+				autoCloseBrackets: true,
+				matchBrackets: true,
+				showCursorWhenSelecting: true,
+				theme: "monokai",
+			});
+		});
+	</script>
+</selection>
 <selection name="body">
 	<div class="panel panel-primary">
-		<div class="panel-heading"> 
+		<div class="panel-heading">
 			<h3 class="panel-title">文件管理器</h3>
 		</div>
 		<div class="panel-body">
@@ -26,13 +79,13 @@
 				<button type="reset" class="btn btn-warning btn-xs">重置内容</button>
 			</li>
 			<nempty name="info">
-				<div class="alert <eq name="info.status" value="1">alert-success</else>alert-danger</eq> alert-dismissible fade in" role="alert" style="margin-bottom: 0px;">
+				<div class="alert <eq name='info.status' value='1'>alert-success</else>alert-danger</eq> alert-dismissible fade in" role="alert" style="margin-bottom: 0px;">
 					<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">×</span></button>
 					<strong>{$info.info}</strong>
 				</div>
 			</nempty>
 			<div class="form-group">
-				<textarea name="content" class="form-control" rows="20"><nempty name="content">{$content}</nempty></textarea>
+				<textarea name="content" class="form-control" id="content" rows="30"><nempty name="content">{$content}</nempty></textarea>
 			</div>
 		</form>
 		<div class="panel-footer">
