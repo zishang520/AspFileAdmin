@@ -316,13 +316,14 @@ HomeController.extend("Edit", function() {
                     stream.Close();
                 }
             }
-            content = IO.file.readAllText(filepath, charset);
+            content = F.encodeHtml(IO.file.readAllText(filepath, charset));
         } else {
             content = '文件内容超过1Mb，请下载后编辑';
         }
     } else {
         content = '读取文件不存在';
     }
+    this.assign('hashid', F.guid("N"));
     this.assign('filepath', filepath);
     this.assign('charset', charsetint);
     this.assign("info", info);

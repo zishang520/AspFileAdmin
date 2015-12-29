@@ -1,6 +1,10 @@
 ﻿<extend file="../layout/layout.html" />
 <selection name="title">文件管理器-文件夹目录</selection>
-<selection name="header"></selection>
+<selection name="header">
+    <script type="text/javascript" src="FileAdminIndex/js/highlight.min.js"></script>
+    <link type="text/css" rel="stylesheet" href="FileAdminIndex/css/github.css"/>
+    <script>hljs.initHighlightingOnLoad();</script>
+</selection>
 <selection name="body">
     <div class="panel panel-primary">
         <div class="panel-heading">
@@ -19,7 +23,7 @@
         </div>
         <a href="{$upath}" class="list-group-item list-group-item-danger"><span class="glyphicon glyphicon-level-up" aria-hidden="true"></span> 返回目录</a>
         <li class="list-group-item list-group-item-info">文件查看</li>
-        <pre><nempty name="content">{$content}</else>查看的内容为空或不是所支持的编码</nempty></pre>
+        <pre><code><nempty name="content">{$content}</else>查看的内容为空或不是所支持的编码</nempty></code></pre>
         <div class="panel-footer">
             <include file="../public/panel_foot.html" />
         </div>

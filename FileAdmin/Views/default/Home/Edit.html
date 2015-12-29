@@ -4,7 +4,7 @@
 	<link rel="stylesheet" href="FileAdminIndex/code/lib/codemirror.css">
 	<link rel="stylesheet" href="FileAdminIndex/code/addon/fold/foldgutter.css">
 	<link rel="stylesheet" href="FileAdminIndex/code/addon/dialog/dialog.css">
-	<link rel="stylesheet" href="FileAdminIndex/code/theme/monokai.css">
+	<link rel="stylesheet" href="FileAdminIndex/code/theme/eclipse.css">
 	<script src="FileAdminIndex/code/lib/codemirror.js"></script>
 	<script src="FileAdminIndex/code/addon/search/searchcursor.js"></script>
 	<script src="FileAdminIndex/code/addon/search/search.js"></script>
@@ -41,7 +41,7 @@
 					mode: "vbscript"
 				}]
 			};
-			var myCodeMirror = CodeMirror.fromTextArea(document.getElementById('content'),{
+			var myCodeMirror = CodeMirror.fromTextArea(document.getElementById('{$hashid}'),{
 				mode: mixedMode,
 				tabSize:4,
 				lineNumbers: true,
@@ -49,7 +49,8 @@
 				autoCloseBrackets: true,
 				matchBrackets: true,
 				showCursorWhenSelecting: true,
-				theme: "monokai",
+				theme: "eclipse",
+				// readOnly: true
 			});
 		});
 	</script>
@@ -85,7 +86,7 @@
 				</div>
 			</nempty>
 			<div class="form-group">
-				<textarea name="content" class="form-control" id="content" rows="30"><nempty name="content">{$content}</nempty></textarea>
+				<textarea name="content" class="form-control" id="{$hashid}" rows="30"><nempty name="content">{$content}</nempty></textarea>
 			</div>
 		</form>
 		<div class="panel-footer">
