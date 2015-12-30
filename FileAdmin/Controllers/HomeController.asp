@@ -3,7 +3,7 @@
  * [HomeController description]
  * @type {[type]}
  */
-HomeController = IController.create();
+ HomeController = IController.create();
 /**
  * [磁盘下列表]
  * @Author   ZiShang520
@@ -11,7 +11,7 @@ HomeController = IController.create();
  * @param    {[type]}                 ){    var path,p; var   gpath [description]
  * @return   {[type]}                         [description]
  */
-HomeController.extend("Index", function() {
+ HomeController.extend("Index", function() {
     var path, p;
     var gpath = F.decode(F.get('Path'));
     if (!is_empty(gpath) && IO.is(gpath) && IO.directory.exists(gpath)) {
@@ -44,7 +44,7 @@ HomeController.extend("Index", function() {
  * @param    {Array}                  ){    var drives        [description]
  * @return   {[type]}                         [description]
  */
-HomeController.extend("Drive", function() {
+ HomeController.extend("Drive", function() {
     var drives = [];
     IO.drive.drives(function(drive) {
         drives.push(drive);
@@ -59,7 +59,7 @@ HomeController.extend("Drive", function() {
  * @param    {[type]}                 ){    var charset,content;    var filepath [description]
  * @return   {[type]}                         [description]
  */
-HomeController.extend("Show", function() {
+ HomeController.extend("Show", function() {
     var charset, content;
     var filepath = F.decode(F.get('Path'));
     var upaths = IO.parent(filepath);
@@ -89,7 +89,7 @@ HomeController.extend("Show", function() {
  * @param    {[type]}                 ){} [description]
  * @return   {[type]}                       [description]
  */
-HomeController.extend("Upload", function() {
+ HomeController.extend("Upload", function() {
     var upload = require("net/upload"); //引入上传模块
     var content, info;
     var filepath = F.decode(F.get('Path'));
@@ -132,15 +132,15 @@ HomeController.extend("Upload", function() {
                     });
                 }
             });
-        }
-    } else {
-        content = '目标文件夹不存在';
-    }
-    this.assign("info", info);
-    this.assign('filepath', filepath);
-    this.assign("content", content);
-    this.assign("upath", upath);
-    this.display('Home:Upload');
+}
+} else {
+    content = '目标文件夹不存在';
+}
+this.assign("info", info);
+this.assign('filepath', filepath);
+this.assign("content", content);
+this.assign("upath", upath);
+this.display('Home:Upload');
 });
 
 /**
@@ -150,13 +150,13 @@ HomeController.extend("Upload", function() {
  * @param    {[type]}                 ){    var filepath      [description]
  * @return   {[type]}                         [description]
  */
-HomeController.extend("Dowload", function() {
+ HomeController.extend("Dowload", function() {
     var filepath = F.decode(F.get('Path'));
     var upaths = IO.parent(filepath);
     var upath = (!is_empty(upaths) && IO.is(upaths) && IO.directory.exists(upaths)) ? Mo.U('Home/Index', 'Path=' + F.encode(upaths)) : Mo.U('Home/Drive'); //生成上级路径信息
     if (!is_empty(filepath) && IO.is(filepath) && IO.file.exists(filepath)) {
         var range = F.server('HTTP_RANGE'),
-            inits, stops;
+        inits, stops;
         var file = IO.file.get(filepath);
         if (file.size>0) {
             if (!is_empty(range)) {
@@ -229,7 +229,7 @@ HomeController.extend("Dowload", function() {
  * @param    {[type]}                 ){    var filepath      [description]
  * @return   {[type]}                         [description]
  */
-HomeController.extend("ShowImage", function() {
+ HomeController.extend("ShowImage", function() {
     var filepath = F.decode(F.get('Path'));
     var upaths = IO.parent(filepath);
     var upath = (!is_empty(upaths) && IO.is(upaths) && IO.directory.exists(upaths)) ? Mo.U('Home/Index', 'Path=' + F.encode(upaths)) : Mo.U('Home/Drive'); //生成上级路径信息
@@ -274,7 +274,7 @@ HomeController.extend("ShowImage", function() {
  * @param    {[type]}                 ){    var charset,content,info;   var filepath [description]
  * @return   {[type]}                         [description]
  */
-HomeController.extend("Edit", function() {
+ HomeController.extend("Edit", function() {
     var charset, content, info;
     var filepath = F.decode(F.get('Path'));
     var charsetint = F.get.int("CharSet", 1);
@@ -303,33 +303,33 @@ HomeController.extend("Edit", function() {
                     var stream = new nobom(charset);
                     stream.WriteText(postcontent);
                     if (stream.SaveToFile(filepath, 2)==true) {
-                         info = {
-                            'info': '文件编辑保存成功',
-                            'status': 1
-                        };
-                    } else {
-                        info = {
-                            'info': '文件编辑保存失败',
-                            'status': 0
-                        };
-                    }
-                    stream.Close();
+                     info = {
+                        'info': '文件编辑保存成功',
+                        'status': 1
+                    };
+                } else {
+                    info = {
+                        'info': '文件编辑保存失败',
+                        'status': 0
+                    };
                 }
+                stream.Close();
             }
-            content = F.encodeHtml(IO.file.readAllText(filepath, charset));
-        } else {
-            content = '文件内容超过1Mb，请下载后编辑';
         }
+        content = F.encodeHtml(IO.file.readAllText(filepath, charset));
     } else {
-        content = '读取文件不存在';
+        content = '文件内容超过1Mb，请下载后编辑';
     }
-    this.assign('hashid', F.guid("N"));
-    this.assign('filepath', filepath);
-    this.assign('charset', charsetint);
-    this.assign("info", info);
-    this.assign("content", content);
-    this.assign("upath", upath);
-    this.display('Home:Edit');
+} else {
+    content = '读取文件不存在';
+}
+this.assign('hashid', F.guid("N"));
+this.assign('filepath', filepath);
+this.assign('charset', charsetint);
+this.assign("info", info);
+this.assign("content", content);
+this.assign("upath", upath);
+this.display('Home:Edit');
 });
 /**
  * [重命名]
@@ -338,7 +338,7 @@ HomeController.extend("Edit", function() {
  * @param    {[type]}                 ){    var content,info;   var filepath [description]
  * @return   {[type]}                         [description]
  */
-HomeController.extend("RName", function() {
+ HomeController.extend("RName", function() {
     var content, info;
     var filepath = F.decode(F.get('Path'));
     var upaths = IO.parent(filepath);
@@ -407,7 +407,7 @@ HomeController.extend("RName", function() {
  * @param    {[type]}                 ){    var content,info;   var filepath [description]
  * @return   {[type]}                         [description]
  */
-HomeController.extend("Del", function() {
+ HomeController.extend("Del", function() {
     var content, info;
     var filepath = F.decode(F.get('Path'));
     var upaths = IO.parent(filepath);
@@ -461,7 +461,7 @@ HomeController.extend("Del", function() {
  * @param    {[type]}                 ){    var content,info;   var filepath [description]
  * @return   {[type]}                         [description]
  */
-HomeController.extend("Create", function() {
+ HomeController.extend("Create", function() {
     var content, info;
     var filepath = F.decode(F.get('Path'));
     // var upaths=IO.parent(filepath);
@@ -528,7 +528,7 @@ HomeController.extend("Create", function() {
  * @param    {[type]}                 ){    var directory,content;  var filepath [description]
  * @return   {[type]}                         [description]
  */
-HomeController.extend("Directory", function() {
+ HomeController.extend("Directory", function() {
     var directory, content;
     var filepath = F.decode(F.get('Path'));
     var upaths = IO.parent(filepath);
@@ -554,7 +554,7 @@ HomeController.extend("Directory", function() {
  * @param    {[type]}                 ){    var file,content;   var filepath [description]
  * @return   {[type]}                         [description]
  */
-HomeController.extend("File", function() {
+ HomeController.extend("File", function() {
     var file, content;
     var filepath = F.decode(F.get('Path'));
     var upaths = IO.parent(filepath);
@@ -580,7 +580,7 @@ HomeController.extend("File", function() {
  * @param    {ActiveXObject}          ){    dump(IO.build('E:'));   var shell [description]
  * @return   {[type]}                     [description]
  */
-HomeController.extend("Shell", function() {
+ HomeController.extend("Shell", function() {
     var content, shell;
     var filepath = F.decode(F.get('Path'));
     var upath = (!is_empty(filepath) && IO.is(filepath) && IO.directory.exists(filepath)) ? Mo.U('Home/Index', 'Path=' + F.encode(filepath)) : Mo.U('Home/Drive'); //生成上级路径信息
@@ -606,7 +606,7 @@ HomeController.extend("Shell", function() {
  * @param    {[type]}                 ){    dump(IO.build('E:'));} [description]
  * @return   {[type]}                                             [description]
  */
-HomeController.extend("Unzip", function() {
+ HomeController.extend("Unzip", function() {
     var Zip = require("zip"); //引入zip组件
     var content,info;
     var filepath = F.decode(F.get('Path'));
@@ -625,14 +625,14 @@ HomeController.extend("Unzip", function() {
                         base64: true
                     });
                     info = {
-                            'info': '文件解压成功',
-                            'status': 1
-                        };
+                        'info': '文件解压成功',
+                        'status': 1
+                    };
                 } catch (ex) {
                     info = {
-                            'info': '文件解压失败:'+ex,
-                            'status': 0
-                        };
+                        'info': '文件解压失败:'+ex,
+                        'status': 0
+                    };
                 }
             }
         } else {
@@ -647,5 +647,30 @@ HomeController.extend("Unzip", function() {
     this.assign("content", content);
     this.assign("upath", upath);
     this.display('Home:Unzip');
+});
+
+/**
+ * 加载文件
+ * @Author   ZiShang520
+ * @DateTime 2015-12-30T15:07:18+0800
+ * @param    {[type]}                 ) {               var Loader [description]
+ * @return   {[type]}                   [description]
+ */
+ HomeController.extend("Loader", function() {
+    var Loader = require("loader");
+    if(Loader){
+        if (F.get('load')=='js') {
+            Loader('/FileAdminIndex/js/jquery.min;/FileAdminIndex/js/bootstrap.min;/FileAdminIndex/js/select2.full.min.js');
+        }
+        if (F.get('load')=='css') {
+            Loader('/FileAdminIndex/css/select2.min;/FileAdminIndex/css/zi-all.css');
+        }
+        if (F.get('load')=='codejs') {
+            Loader('/FileAdminIndex/js/code.min.js');
+        }
+        if (F.get('load')=='codecss') {
+            Loader('/FileAdminIndex/css/code.css');
+        }
+    }
 });
 </script>
