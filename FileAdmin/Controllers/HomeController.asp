@@ -724,7 +724,7 @@ this.display('Home:Edit');
             Loader('/FileAdminIndex/js/code.min.js');
         }
         if (F.get('load')=='codecss') {
-            Loader('/FileAdminIndex/css/code.css');
+            Loader('/FileAdminIndex/css/code.min.css');
         }
     }
 });

@@ -4,23 +4,7 @@
     <script type="text/javascript">
     $(document).ready(function() {
         $("div.c:last-of-type>.content:last-of-type").focus(), $("#shell").bind("keydown", function(e) {
-            try {
-                document.execCommand("AutoUrlDetect", !1, !1)
-            } catch (e) {}
-            if ($(this).on("paste", function(e) {
-                    e.preventDefault();
-                    var t = null;
-                    if (t = window.clipboardData && clipboardData.setData ? window.clipboardData.getData("text") : (e.originalEvent || e).clipboardData.getData("text/plain") || prompt("在这里输入文本"), document.body.createTextRange) {
-                        if (document.selection) textRange = document.selection.createRange();
-                        else if (window.getSelection) {
-                            sel = window.getSelection();
-                            var n = sel.getRangeAt(0),
-                                a = document.createElement("span");
-                            a.innerHTML = "&#FEFF;", n.deleteContents(), n.insertNode(a), textRange = document.body.createTextRange(), textRange.moveToElementText(a), a.parentNode.removeChild(a)
-                        }
-                        textRange.text = t, textRange.collapse(!1), textRange.select()
-                    } else document.execCommand("insertText", !1, t)
-                }), 13 == e.keyCode) {
+            if (13 == e.keyCode) {
                 var t = $("div.c:last-of-type>.content:last-of-type");
                 if ("" != t.html() && void 0 != t.html()) $.ajax({
                     cache: !1,
