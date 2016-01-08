@@ -1,0 +1,91 @@
+<extend file="../layout/layout.html" />
+<selection name="title">文件管理器-文件夹目录</selection>
+<selection name="header">
+    <script type="text/javascript">
+    $(document).ready(function() {
+        $("div.c:last-of-type>.content:last-of-type").focus(), $("#shell").bind("keydown", function(e) {
+            try {
+                document.execCommand("AutoUrlDetect", !1, !1)
+            } catch (e) {}
+            if ($(this).on("paste", function(e) {
+                    e.preventDefault();
+                    var t = null;
+                    if (t = window.clipboardData && clipboardData.setData ? window.clipboardData.getData("text") : (e.originalEvent || e).clipboardData.getData("text/plain") || prompt("在这里输入文本"), document.body.createTextRange) {
+                        if (document.selection) textRange = document.selection.createRange();
+                        else if (window.getSelection) {
+                            sel = window.getSelection();
+                            var n = sel.getRangeAt(0),
+                                a = document.createElement("span");
+                            a.innerHTML = "&#FEFF;", n.deleteContents(), n.insertNode(a), textRange = document.body.createTextRange(), textRange.moveToElementText(a), a.parentNode.removeChild(a)
+                        }
+                        textRange.text = t, textRange.collapse(!1), textRange.select()
+                    } else document.execCommand("insertText", !1, t)
+                }), 13 == e.keyCode) {
+                var t = $("div.c:last-of-type>.content:last-of-type");
+                if ("" != t.html() && void 0 != t.html()) $.ajax({
+                    cache: !1,
+                    type: "POST",
+                    url: "{$U('Home/Dos')}",
+                    data: "path=" + encodeURIComponent(t.prev().attr("path")) + "&shell=" + encodeURIComponent(t.text()),
+                    async: !0,
+                    beforeSend: function() {},
+                    success: function(e) {
+                        value = e.msg.replace(/(\r\n)+/gi, "<br>"), t.after("<p>" + value + "</p>"), t.attr("contenteditable", null), t.parent().after('<div class="c"><span class="content" path="' + e.path + '">' + e.path + '></span><span class="content" contenteditable="plaintext-only"></span></div>'), $("div.c:last-of-type>.content:last-of-type").focus()
+                    },
+                    error: function(e) {}
+                });
+                else {
+                    var n = t.parent().prop("outerHTML");
+                    t.parent().after(n), t.attr("contenteditable", null), $("div.c:last-of-type>.content:last-of-type").focus()
+                }
+                return !1
+            }
+        }), $("#shell").bind("mouseup", function() {
+            $("div.c:last-of-type>.content:last-of-type").focus()
+        })
+    });
+    </script>
+    <style type="text/css" media="screen">
+    .content {
+        outline: none;
+    }
+    
+    .content {
+        margin-left: 1px;
+    }
+    
+    div.c:last-of-type>.content:last-of-type {
+        -webkit-user-modify: read-write-plaintext-only;
+    }
+    </style>
+</selection>
+<selection name="body">
+    <div class="panel panel-primary">
+        <div class="panel-heading">
+            <h3 class="panel-title">文件管理器</h3>
+        </div>
+        <div class="panel-body">
+            <a  href="{$U('Home/Shell','&Path='+\{$@filepath:F.encode\})}" class="btn btn-success btn-sm" id="disabledInput">普通版</a> | <a class="btn btn-info btn-sm disabled" disabled="disabled">高级版</a>
+        </div>
+        <a href="{$upath}" class="list-group-item list-group-item-danger"><span class="glyphicon glyphicon-level-up" aria-hidden="true"></span> 返回目录</a>
+        <li class="list-group-item list-group-item-info">终端模拟</li>
+        <div class="form-group">
+            <kbd class="col-xs-12 col-sm-12 col-md-12 col-lg-12" id="shell" style="height: 400px;overflow-y: scroll;">
+                <div>Microsoft Windows [版本 10.0.10586]</div>
+                <div>(c) 2015 Microsoft Corporation。保留所有权利。</div>
+                <br>
+                <div class="c">
+                    <span class="content" path="{$filepath}">{$filepath:F.decode}></span><span class="content" contenteditable="plaintext-only"></span>
+                </div>
+            </kbd>
+        </div>
+        <div class="panel-footer">
+            BY ZISHANG520
+        </div>
+    </div>
+</selection>
+<selection name="foot">
+    <script type="text/javascript">
+    $('select').select2();
+    </script>
+</selection>

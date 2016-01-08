@@ -6,7 +6,7 @@ ErrorController.extend("Index", function(name){
 });
 //定义其他方法
 ErrorController.extend("Show", function(name){
-    F.echo("I'm MAE!"); 
+    F.echo("I'm MAE!");
 });
 //定义控制器空方法
 ErrorController.extend("empty", function(name){

