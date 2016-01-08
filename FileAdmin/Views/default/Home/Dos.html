@@ -14,7 +14,7 @@
                     async: !0,
                     beforeSend: function() {},
                     success: function(e) {
-                        value = e.msg.replace(/(\r\n)+/gi, "<br>"), t.after("<p>" + value + "</p>"), t.attr("contenteditable", null), t.parent().after('<div class="c"><span class="content" path="' + e.path + '">' + e.path + '></span><span class="content" contenteditable="plaintext-only"></span></div>'), $("div.c:last-of-type>.content:last-of-type").focus()
+                        value = e.msg.replace(/(\r\n|\n)/ig, "<br>"), t.after("<p>" + value + "</p>"), t.attr("contenteditable", null), t.parent().after('<div class="c"><span class="content" path="' + e.path + '">' + e.path + '></span><span class="content" contenteditable="plaintext-only"></span></div>'), $("div.c:last-of-type>.content:last-of-type").focus()
                     },
                     error: function(e) {}
                 });

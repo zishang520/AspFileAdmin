@@ -319,8 +319,8 @@
     str = str.replace(/"/ig, '\\"');
     str = str.replace(/\r/ig, '\\r');
     str = str.replace(/\n/ig, '\\n');
-    str = str.replace(/\s/ig, '&nbsp;');
     str = str.replace(/\t/ig, '&nbsp;&nbsp;&nbsp;&nbsp;');
+    str = str.replace(/\s/ig, '&nbsp;');
     return str;
 }
 </script>
