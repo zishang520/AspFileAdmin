@@ -8,7 +8,7 @@
  FileName = function(path) {
     var filename = path.substr(path.lastIndexOf("\\") + 1);
     return filename;
-}
+};
 /**
  * [Path 获取父级路径]
  * @Author   ZiShang520
@@ -18,7 +18,7 @@
  Path = function(paths) {
     var path = paths.substr(0, paths.lastIndexOf("\\"));
     return path;
-}
+};
 /**
  * [CharSetTest 编码]
  * @Author   ZiShang520
@@ -44,7 +44,7 @@
         break;
     }
     return charset;
-}
+};
 /**
  * [SizeConvert 文件大小转换]
  * @Author   ZiShang520
@@ -66,7 +66,7 @@
         size = bytes + " Byte"
     }
     return size;
-}
+};
 /**
  * [SizePercent 计算磁盘使用百分比]
  * @Author   ZiShang520
@@ -78,7 +78,7 @@
     var percent = parseInt(sizea) / parseInt(sizeb);
     var percent = 100 - parseInt(percent * 100);
     return parseInt(percent);
-}
+};
 /**
  * [VolumenameAuto 磁盘类型]
  * @Author   ZiShang520
@@ -112,7 +112,7 @@
         break;
     }
     return typename;
-}
+};
 /**
  * [ip2long IP转换都整型]
  * @Author   ZiShang520
@@ -126,7 +126,7 @@
     num = Number(ip[0]) * 256 * 256 * 256 + Number(ip[1]) * 256 * 256 + Number(ip[2]) * 256 + Number(ip[3]);
     num = num >>> 0;
     return num;
-}
+};
 /**
  * [long2ip 整型转ip]
  * @Author   ZiShang520
@@ -143,7 +143,7 @@
     tt[3] = (num << 24) >>> 24;
     str = String(tt[0]) + "." + String(tt[1]) + "." + String(tt[2]) + "." + String(tt[3]);
     return str;
-}
+};
 /**
  * [Add 加法运算]
  * @Author   ZiShang520
@@ -153,7 +153,7 @@
  */
  Add = function(arg1, arg2) {
     return parseInt(arg1) + parseInt(arg2);
-}
+};
 /**
  * [Sub 减法]
  * @Author   ZiShang520
@@ -163,7 +163,7 @@
  */
  Sub = function(arg1, arg2) {
     return parseInt(arg1) - parseInt(arg2);
-}
+};
 /**
  * [FloatAdd 浮点加法]
  * @Author   ZiShang520
@@ -185,7 +185,7 @@
     }
     m = Math.pow(10, Math.max(r1, r2))
     return (arg1 * m + arg2 * m) / m
-}
+};
 /**
  * [FloatSub 浮点减法]
  * @Author   ZiShang520
@@ -209,7 +209,7 @@
     //动态控制精度长度
     n = (r1 >= r2) ? r1 : r2;
     return ((arg1 * m - arg2 * m) / m).toFixed(n);
-}
+};
 
 /**
  * [FloatMul 浮点乘法]
@@ -229,7 +229,7 @@
         m += s2.split(".")[1].length
     } catch (e) {}
     return Number(s1.replace(".", "")) * Number(s2.replace(".", "")) / Math.pow(10, m)
-}
+};
 
 /**
  * [FloatDiv 浮点除法]
@@ -253,7 +253,7 @@
         r2 = Number(arg2.toString().replace(".", ""))
         return (r1 / r2) * pow(10, t2 - t1);
     }
-}
+};
 /**
  * [writeObj 输出obj]
  * @Author   ZiShang520
@@ -268,6 +268,20 @@
         description += i + " => " + property + "\r\n";
     }
     console.log(description);
+};
+
+/**
+ * [empty description]
+ * @Author   ZiShang520
+ * @DateTime 2016-01-10T01:28:26+0800
+ * @param    {[type]}                 obj [description]
+ * @return   {[type]}                     [description]
+ */
+empty=function (obj){
+    for(var name in obj){
+        return false;
+    }
+    return true;
 }
 /**
  * [is_post 判断是否post]
@@ -285,7 +299,7 @@
     } else {
         return false;
     }
-}
+};
 
 /**
  * ajax
@@ -303,8 +317,41 @@
     } else {
         return false;
     }
-}
+};
 
+/**
+ * 是否已经安装
+ * @Author   ZiShang520
+ * @DateTime 2016-01-09T21:45:30+0800
+ * @return   {Boolean}                [description]
+ */
+ is_install = function() {
+    var info = MCM("User");
+    if (is_empty(info('USER')) || is_empty(info('PASS')) || is_empty(info('KEY')) || is_empty(info('IV'))) {
+        return false;
+    } else {
+        return true;
+    }
+};
+/**
+ * 获取安装信息
+ * @Author   ZiShang520
+ * @DateTime 2016-01-09T21:58:24+0800
+ * @param    {[type]}                 key [description]
+ * @return   {[type]}                     [description]
+ */
+ get_install = function(key) {
+    if (is_install()) {
+        var info = MCM("User");
+        if (!is_empty(key)) {
+            return info(key);
+        } else {
+            return info.config;
+        }
+    }else{
+        return undefined;
+    }
+};
 /**
  * 字符串替换
  * @Author   ZiShang520
@@ -322,5 +369,5 @@
     str = str.replace(/\t/ig, '&nbsp;&nbsp;&nbsp;&nbsp;');
     str = str.replace(/\s/ig, '&nbsp;');
     return str;
-}
+};
 </script>

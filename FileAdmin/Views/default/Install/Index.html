@@ -1,0 +1,119 @@
+<!doctype html>
+<html lang="zh-CN">
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+    <meta name="_token" content="{$__csrf}" />
+    <link rel="shortcut icon" href="/favicon.ico" />
+    <title>登陆</title>
+    <css file="FileAdminIndex/css/bootstrap.min.css" />
+    <css file="{$U('Public/Loader','load=css')}" />
+    <js file="{$U('Public/Loader','load=js')}" />
+    <script type="text/javascript">
+        $(document).ready(function() {
+            $(function() {
+                $.ajaxSetup({
+                    headers: {
+                        'X-CSRF-Token': $('meta[name="_token"]').attr('content')
+                    }
+                });
+            });
+            $('#img').click(function() {
+                $(this).attr('src', '{$U("Code/Index")}&' + Math.random());
+            });
+            if ($('.modal-body>p:first-of-type').hasClass("success")) {
+                var n=2;
+                var settime=setInterval(function(){
+                    if(n==0){
+                        clearInterval(settime);
+                        window.location.href='{$U("Public/Code")}';
+                    }else if(n>0){
+                        $('.modal-body>p:first-of-type>span').text(n);
+                        n-=1;
+                    }
+                },1000);
+            }
+        });
+    </script>
+    <style type="text/css" media="screen">
+        body {
+            background-color: #F7F7F9;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container-fluid">
+        <div class="modal fade in" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" style="display: block; padding-right: 17px; position: initial;">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h4 class="modal-title" id="exampleModalLabel">安装文件管理</h4>
+                    </div>
+                    <div class="modal-body">
+                        <nempty name="info">
+                            <div class="alert <eq name='info.status' value='1'>alert-success</else>alert-danger</eq> alert-dismissible fade in" role="alert">
+                                <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">×</span></button>
+                                <strong>{$info.info}</strong>
+                            </div>
+                        </else>
+                        <div class="alert alert-warning alert-dismissible fade in" role="alert">
+                            <strong>请妥善保存你的用户名及密码，丢失将不能找回</strong>
+                        </div>
+                    </nempty>
+                    <or name="groupd" and="info:is_empty eq false" and="info.status neq 1" />
+                    <expression and="info:is_empty eq true" group="groupd">
+                        <form class="form-horizontal" action="{$U('Public/install')}" method="post">
+                            <input type="hidden" name="__csrf" value="{$__csrf}">
+                            <div class="form-group">
+                                <label for="inputEmail3" class="col-sm-2 control-label">管理账号</label>
+                                <div class="col-sm-9">
+                                    <input name="username" type="text" class="form-control" id="inputEmail3" placeholder="管理账号">
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label for="inputPassword3" class="col-sm-2 control-label">登陆密码</label>
+                                <div class="col-sm-9">
+                                    <input name="password" type="password" class="form-control" id="inputPassword3" autocomplete="off" placeholder="登陆密码">
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label for="inputPassword3" class="col-sm-2 control-label">确认密码</label>
+                                <div class="col-sm-9">
+                                    <input name="rpassword" type="password" class="form-control" id="inputPassword3" autocomplete="off" placeholder="确认密码">
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label for="inputPassword3" class="col-sm-2 control-label">验证码</label>
+                                <div class="col-sm-9">
+                                    <input name="code" type="text" class="form-control" id="inputsafe3" placeholder="验证码">
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="col-sm-offset-2 col-sm-9">
+                                    <img id='img' src="{$U('Public/Code')}" alt='点击图片刷新' title='点击图片刷新' />
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="col-sm-offset-2 col-sm-9">
+                                    <button type="submit" class="btn btn-info">登陆</button>
+                                    <button type="reset" class="btn btn-warning">重置</button>
+                                </div>
+                            </div>
+                        </form>
+                        <else/>
+                        <p class="text-center success"><span>3</span>秒后跳转到<a href="{$U('Public/Login')}">登陆页面</a></p>
+                    </expression>
+                </div>
+                <div class="modal-footer">
+                    By zishang520
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+
+</html>

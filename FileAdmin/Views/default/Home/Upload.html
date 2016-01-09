@@ -29,7 +29,7 @@
 						<strong>{$error.info}</strong>
 					</div>
 				</nempty>
-				<form name="input" action="{$U('Home/Upload','Path='+\{$@filepath:F.encode\})}" method="post" class="form-inline" enctype="multipart/form-data">
+				<form name="input" action="{$U('Home/Upload','Path='+\{$@filepath:F.encode\}+'&__csrf='+\{$@__csrf\})}" method="post" class="form-inline" enctype="multipart/form-data">
 					<label for="exampleInputFile" class="control-label">文件</label>
 					<div class="file form-control input-sm">
 						<label for="exampleInputFile" class="control-label">选择文件</label>

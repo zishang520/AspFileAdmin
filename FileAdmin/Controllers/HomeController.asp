@@ -3,7 +3,9 @@
  * [HomeController description]
  * @type {[type]}
  */
- HomeController = IController.create();
+ HomeController = IController.create(function(){
+    Auth();
+ });
 /**
  * [磁盘下列表]
  * @Author   ZiShang520
@@ -705,27 +707,14 @@ this.display('Home:Edit');
 });
 
 /**
- * 加载文件
+ * 空方法
  * @Author   ZiShang520
- * @DateTime 2015-12-30T15:07:18+0800
- * @param    {[type]}                 ) {               var Loader [description]
- * @return   {[type]}                   [description]
+ * @DateTime 2016-01-09T21:07:00+0800
+ * @param    {[type]}                 name){                 F.echo("错误：未定义" + name + "方法");} [description]
+ * @return   {[type]}                         [description]
  */
- HomeController.extend("Loader", function() {
-    var Loader = require("loader");
-    if(Loader){
-        if (F.get('load')=='js') {
-            Loader('/FileAdminIndex/js/jquery.min;/FileAdminIndex/js/bootstrap.min;/FileAdminIndex/js/select2.full.min.js');
-        }
-        if (F.get('load')=='css') {
-            Loader('/FileAdminIndex/css/select2.min;/FileAdminIndex/css/zi-all.css');
-        }
-        if (F.get('load')=='codejs') {
-            Loader('/FileAdminIndex/js/code.min.js');
-        }
-        if (F.get('load')=='codecss') {
-            Loader('/FileAdminIndex/css/code.min.css');
-        }
-    }
+ HomeController.extend("empty", function(name){
+    F.echo("错误：未定义" + name + "方法");
 });
+
 </script>
