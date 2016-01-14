@@ -1,0 +1,12 @@
+{
+    "name" : "PasswordHash",
+    "version" : "1.0.0",
+    "description" : "PasswordHash",
+    "keywords" : ["PasswordHash"],
+    "homepage" : "http://zishang520.com",
+    "license" : "GPLv3",
+    "files" : [
+        "index.js"
+    ],
+    "main" : "PasswordHash/index"
+}

@@ -4,8 +4,12 @@
  * @type {[type]}
  */
  HomeController = IController.create(function(){
+    if (!is_install()) {
+        F.goto(Mo.U('Public/Install'));
+        F.exit();
+    }
     Auth();
- });
+});
 /**
  * [磁盘下列表]
  * @Author   ZiShang520
@@ -305,7 +309,7 @@ this.display('Home:Upload');
                     var stream = new nobom(charset);
                     stream.WriteText(postcontent);
                     if (stream.SaveToFile(filepath, 2)==true) {
-                       info = {
+                     info = {
                         'info': '文件编辑保存成功',
                         'status': 1
                     };
@@ -714,7 +718,7 @@ this.display('Home:Edit');
  * @return   {[type]}                         [description]
  */
  HomeController.extend("empty", function(name){
-    F.echo("错误：未定义" + name + "方法");
+    F.goto(Mo.U('Home/Index'));
 });
 
 </script>

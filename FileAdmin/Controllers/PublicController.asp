@@ -13,15 +13,21 @@
  * @return   {[type]}                     [description]
  */
  PublicController.extend('Login', function() {
+    if (!is_install()) {
+        F.goto(Mo.U('Public/Install'));
+        F.exit();
+    }
     var info;
     if (is_post()) {
+        var Hash = require("PasswordHash");
+        var result = new Hash(5,20);
         var psafe = F.post("code");
         var ssafe = F.session("code");
         if (!is_empty(psafe) && !is_empty(ssafe) && psafe.toLocaleLowerCase() === ssafe.toLocaleLowerCase()) {
             var username = F.post('username');
             var password = F.post('password');
             if (!is_empty(username) && !is_empty(password)) {
-                if (get_install('USER') === username && get_install('PASS') === SHA1(password)) {
+                if (get_install('USER') === username && result.CheckPassword(password,get_install('PASS'))) {
                     var ip = ip2long(F.server("REMOTE_ADDR"));
                     var datetime = parseInt(F.timespan(new Date())) + 24 * 3600;
                     var string = '{"username":"' + username + '","password":"' + password + '","ip":' + ip + ',"datetime":"' + datetime + '"}';
@@ -78,6 +84,8 @@
  */
  PublicController.extend('Install', function() {
     if (!is_install()) {
+        var Hash = require("PasswordHash");
+        var result = new Hash(5,20);
         var info;
         if (is_post()) {
             var psafe = F.post("code");
@@ -91,9 +99,9 @@
                         var info = MCM("User");
                         info({
                             USER: user,
-                            PASS: SHA1(pass),
-                            KEY: MD5(user + pass + F.formatdate(new Date(), "HH:mm:ss")),
-                            IV: MD5(user + SHA1(pass) + F.formatdate(new Date(), "HH:mm:ss"))
+                            PASS: result.HashPassword(pass),
+                            KEY: result.HashPassword(user + pass + F.formatdate(new Date(), "HH:mm:ss")),
+                            IV: result.HashPassword(user + SHA1(pass) + F.formatdate(new Date(), "HH:mm:ss"))
                         });
                         if (info.save()) {
                             info = {
