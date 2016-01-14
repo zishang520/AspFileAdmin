@@ -70,6 +70,8 @@
         F.session.destroy("code");
     }
     var url=(Mo.Action=='Login')?Mo.U('Home/Index'):(!is_empty(F.server('HTTP_REFERER'))?F.server('HTTP_REFERER'):Mo.U());
+    // var GA = require("ga");
+    // this.assign('inio',GA.get_qrcode_url(get_install('USER'), GA.create_secret(16),'MoaspFile',true));
     this.assign('url', url);
     this.assign('info', info);
     this.display('Login:Index');
