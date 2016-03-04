@@ -12,28 +12,27 @@
      * @param    {[type]}                 condition [description]
      */
      AES_ED = function(str, condition) {
+        var condition=condition || 1;
         CryptoJS.require.Padding().Mode();
         CryptoJS.require['AES']().Format.Hex();
         var key = CryptoJS.enc.Utf8.parse(__LATE);
-        var iv = CryptoJS.enc.Utf8.parse(__IV);
-        var cfg = {
+        var iv  = CryptoJS.enc.Utf8.parse(__IV);
+        var cfg={
             iv: iv,
-            mode: CryptoJS.mode['ECB'], //加密模式
-            padding: CryptoJS.pad['AnsiX923'], //补丁算法
-            format: CryptoJS.format.Hex
+            mode:CryptoJS.mode['CTRGladman'],
+            padding:CryptoJS.pad['Pkcs7'],
+            format:CryptoJS.format.Hex
         };
-        if (condition == 1) { //加密
+        //cfg用于AES和DES，其他加密会忽略部分设置
+        if(condition==1){
             var srcs = CryptoJS.enc.Utf8.parse(str);
             return CryptoJS['AES'].encrypt(srcs, key, cfg).toString();
-        } else if (condition == 2) { //解密
+        } else if (condition == 2) {
             var srcs = CryptoJS.enc.Hex.parse(str);
-            var decryptdata = CryptoJS['AES'].decrypt(CryptoJS.lib.CipherParams.create({
-                ciphertext: srcs
-            }), key, cfg);
+            var decryptdata = CryptoJS['AES'].decrypt(CryptoJS.lib.CipherParams.create({ ciphertext:srcs}), key,cfg); //解密
             return decryptdata.toString(CryptoJS.enc.Utf8);
         }
     };
-
     /**
      * [Auth description]
      * @Author   ZiShang520
@@ -56,7 +55,7 @@
             }else{
                 var admincookiesinfo=F.json(AES_ED(admincookie.__Hash,2));
                 if (!is_empty(admincookiesinfo)) {
-                    if (is_empty(admincookiesinfo['username']) || is_empty(admincookiesinfo['password']) || is_empty(admincookiesinfo['datetime']) || admincookiesinfo['username']!==get_install('USER') || result.CheckPassword(admincookiesinfo['password'],get_install('PASS'))) {
+                    if (is_empty(admincookiesinfo['username']) || is_empty(admincookiesinfo['password']) || is_empty(admincookiesinfo['datetime']) || admincookiesinfo['username']!==get_install('USER') || !result.CheckPassword(admincookiesinfo['password'],get_install('PASS'))) {
                         cookie("Z_Cookies",'',{expires: '1970-01-01 00:00:00'});
                         ctrl.Login();
                         F.exit();

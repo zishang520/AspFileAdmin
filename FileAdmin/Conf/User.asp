@@ -1,5 +1,5 @@
 ﻿<script language="jscript" runat="server">
 return (function(){
-    return {"USER":"admin","PASS":"$P$8fq93ZN7sywqo/vYzD77YcuiKnfiocA","KEY":"$P$80VwrculqD3JT2gtnmLHhSV+Nvgk4eQ","IV":"$P$80kSC7T9jXRsaHQJCE8x2AmMUzcEgoQ"};
+    return {"USER":"admin","PASS":"$p$8BEvrysTnZUfq0/uRQ1A3YzZWDLl9qg","KEY":"$p$8FFhWxQHXQN1hDp8cP3r7SEAxXpyvnw","IV":"$p$8vRRYnsfJZwE8LG2P1b/+lOUt4eD/8A"};
 })();
 </script>

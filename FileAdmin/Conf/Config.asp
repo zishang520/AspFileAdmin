@@ -6,16 +6,16 @@
 		// MO_TAG_LIB : "Test",
 		MO_TEMPLATE_ENGINE : "views/view2.js",
 		MO_ERROR_REPORTING : E_ERROR | E_WARNING,
-		MO_ROUTE_MODE : "",
+		MO_ROUTE_MODE : "URL",
 		MO_ROUTE_URL_EXT : "html", 
 		/*静态路由，不遍历，直接检索*/
 		MO_ROUTE_MAPS : {},
 		/*动态路由，需遍历检查*/
 		MO_ROUTE_RULES : [
 		{
-			LookFor : /^(\w+)\/(\w+)\/Path\/(.*?)$/i,
-			SendTo : "$1/$2?Path=$3"
-		},
+			LookFor : /^(\w+)\/(\w+)\/(\w+)\/(\w+)*$/i,
+			SendTo : "$1/$2?$3=$4"
+		}
 		{
 			LookFor : /^(\w+)\/(\w+)\/CharSet\/([1-3])\/Path\/(.*?)$/i,
 			SendTo : "$1/$2?CharSet=$3&Path=$4"
