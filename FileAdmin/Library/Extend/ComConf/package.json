@@ -1,0 +1,12 @@
+﻿{
+	"name" : "ComConf",
+	"version" : "1.0.0",
+	"description" : "自定义配置文件生成",
+	"keywords" : ["ComConf"],
+	"homepage" : "http://zishang520.com",
+	"license" : "GPLv3",
+	"files" : [
+		"index.js"
+	],
+	"main" : "ComConf/index"
+}

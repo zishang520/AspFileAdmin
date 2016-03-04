@@ -98,7 +98,8 @@
                 var rpass = F.post('rpassword');
                 if (!is_empty(user) && !is_empty(pass) && !is_empty(rpass)) {
                     if (pass === rpass) {
-                        var info = MCM("User");
+                        var My_MCM = require("ComConf");
+                        var info = My_MCM("User");
                         info({
                             USER: user,
                             PASS: result.HashPassword(pass),
