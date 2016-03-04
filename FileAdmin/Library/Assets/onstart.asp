@@ -56,7 +56,7 @@
             }else{
                 var admincookiesinfo=F.json(AES_ED(admincookie.__Hash,2));
                 if (!is_empty(admincookiesinfo)) {
-                    if (is_empty(admincookiesinfo['username']) || is_empty(admincookiesinfo['password']) || is_empty(admincookiesinfo['datetime']) || admincookiesinfo['username']!==get_install('USER') || result.CheckPassword(admincookiesinfo['password'],get_install('PASS'))) {
+                    if (is_empty(admincookiesinfo['username']) || is_empty(admincookiesinfo['password']) || is_empty(admincookiesinfo['datetime']) || admincookiesinfo['username']!==get_install('USER') || !result.CheckPassword(admincookiesinfo['password'],get_install('PASS'))) {
                         cookie("Z_Cookies",'',{expires: '1970-01-01 00:00:00'});
                         ctrl.Login();
                         F.exit();
