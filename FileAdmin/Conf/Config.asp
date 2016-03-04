@@ -15,7 +15,7 @@
 		{
 			LookFor : /^(\w+)\/(\w+)\/(\w+)\/(\w+)*$/i,
 			SendTo : "$1/$2?$3=$4"
-		}
+		},
 		{
 			LookFor : /^(\w+)\/(\w+)\/CharSet\/([1-3])\/Path\/(.*?)$/i,
 			SendTo : "$1/$2?CharSet=$3&Path=$4"
