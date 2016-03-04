@@ -30,7 +30,7 @@
 					</div>
 				</nempty>
 				<form name="input" action="{$U('Home/Upload','Path='+\{$@filepath:F.encode\}+'&__csrf='+\{$@__csrf\})}" method="post" class="form-inline" enctype="multipart/form-data">
-					<label for="exampleInputFile" class="control-label">文件</label>
+					<label class="control-label">文件</label>
 					<div class="file form-control input-sm">
 						<label for="exampleInputFile" class="control-label">选择文件</label>
 						<input type="file" name="upfile" class="form-control input-sm" id="exampleInputFile" placeholder="文件" multiple="multiple">
