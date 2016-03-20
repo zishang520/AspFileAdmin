@@ -6,14 +6,14 @@
 		// MO_TAG_LIB : "Test",
 		MO_TEMPLATE_ENGINE : "views/view2.js",
 		MO_ERROR_REPORTING : E_ERROR | E_WARNING,
-		MO_ROUTE_MODE : "URL",
-		MO_ROUTE_URL_EXT : "html", 
+		MO_ROUTE_MODE : "",
+		MO_ROUTE_URL_EXT : "html",
 		/*静态路由，不遍历，直接检索*/
 		MO_ROUTE_MAPS : {},
 		/*动态路由，需遍历检查*/
 		MO_ROUTE_RULES : [
 		{
-			LookFor : /^(\w+)\/(\w+)\/(\w+)\/(\w+)*$/i,
+			LookFor : /^(\w+)\/(\w+)\/(\w+)\/(\w+)$/i,
 			SendTo : "$1/$2?$3=$4"
 		},
 		{
@@ -46,7 +46,7 @@
 			DB_Splitchars:["[","]"], /* use '`' when DB_Type is 'MYSQL' or 'SQLITE'*/
 			DB_Version:"", /* for MSSQL,it can be 2005,2012...;for mysql it can be 3.51,5.1...*/
 			DB_Owner:"dbo", /* for MSSQL */
-			DB_TABLE_PERX:Mo.Config.Global.MO_TABLE_PERX		
+			DB_TABLE_PERX:Mo.Config.Global.MO_TABLE_PERX
 		}
 	};
 </script>

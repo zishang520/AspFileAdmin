@@ -3,7 +3,7 @@
  * [HomeController description]
  * @type {[type]}
  */
- HomeController = IController.create(function(){
+HomeController = IController.create(function() {
     if (!is_install()) {
         F.goto(Mo.U('Public/Install'));
         F.exit();
@@ -17,7 +17,7 @@
  * @param    {[type]}                 ){    var path,p; var   gpath [description]
  * @return   {[type]}                         [description]
  */
- HomeController.extend("Index", function() {
+HomeController.extend("Index", function() {
     var path, p;
     var gpath = F.decode(F.get('Path'));
     if (!is_empty(gpath) && IO.is(gpath) && IO.directory.exists(gpath)) {
@@ -50,7 +50,7 @@
  * @param    {Array}                  ){    var drives        [description]
  * @return   {[type]}                         [description]
  */
- HomeController.extend("Drive", function() {
+HomeController.extend("Drive", function() {
     var drives = [];
     IO.drive.drives(function(drive) {
         drives.push(drive);
@@ -65,7 +65,7 @@
  * @param    {[type]}                 ){    var charset,content;    var filepath [description]
  * @return   {[type]}                         [description]
  */
- HomeController.extend("Show", function() {
+HomeController.extend("Show", function() {
     var charset, content;
     var filepath = F.decode(F.get('Path'));
     var upaths = IO.parent(filepath);
@@ -95,7 +95,7 @@
  * @param    {[type]}                 ){} [description]
  * @return   {[type]}                       [description]
  */
- HomeController.extend("Upload", function() {
+HomeController.extend("Upload", function() {
     var upload = require("net/upload"); //引入上传模块
     var content, info;
     var filepath = F.decode(F.get('Path'));
@@ -138,15 +138,15 @@
                     });
                 }
             });
-}
-} else {
-    content = '目标文件夹不存在';
-}
-this.assign("info", info);
-this.assign('filepath', filepath);
-this.assign("content", content);
-this.assign("upath", upath);
-this.display('Home:Upload');
+        }
+    } else {
+        content = '目标文件夹不存在';
+    }
+    this.assign("info", info);
+    this.assign('filepath', filepath);
+    this.assign("content", content);
+    this.assign("upath", upath);
+    this.display('Home:Upload');
 });
 
 /**
@@ -156,15 +156,15 @@ this.display('Home:Upload');
  * @param    {[type]}                 ){    var filepath      [description]
  * @return   {[type]}                         [description]
  */
- HomeController.extend("Dowload", function() {
+HomeController.extend("Dowload", function() {
     var filepath = F.decode(F.get('Path'));
     var upaths = IO.parent(filepath);
     var upath = (!is_empty(upaths) && IO.is(upaths) && IO.directory.exists(upaths)) ? Mo.U('Home/Index', 'Path=' + F.encode(upaths)) : Mo.U('Home/Drive'); //生成上级路径信息
     if (!is_empty(filepath) && IO.is(filepath) && IO.file.exists(filepath)) {
         var range = F.server('HTTP_RANGE'),
-        inits, stops;
+            inits, stops;
         var file = IO.file.get(filepath);
-        if (file.size>0) {
+        if (file.size > 0) {
             if (!is_empty(range)) {
                 var byt = F.string.matches(range, /bytes\=(\d+)?-(\d+)?/ig);
                 if (byt.length > 0) {
@@ -235,7 +235,7 @@ this.display('Home:Upload');
  * @param    {[type]}                 ){    var filepath      [description]
  * @return   {[type]}                         [description]
  */
- HomeController.extend("ShowImage", function() {
+HomeController.extend("ShowImage", function() {
     var filepath = F.decode(F.get('Path'));
     var upaths = IO.parent(filepath);
     var upath = (!is_empty(upaths) && IO.is(upaths) && IO.directory.exists(upaths)) ? Mo.U('Home/Index', 'Path=' + F.encode(upaths)) : Mo.U('Home/Drive'); //生成上级路径信息
@@ -280,7 +280,7 @@ this.display('Home:Upload');
  * @param    {[type]}                 ){    var charset,content,info;   var filepath [description]
  * @return   {[type]}                         [description]
  */
- HomeController.extend("Edit", function() {
+HomeController.extend("Edit", function() {
     var charset, content, info;
     var filepath = F.decode(F.get('Path'));
     var charsetint = F.get.int("CharSet", 1);
@@ -292,7 +292,7 @@ this.display('Home:Upload');
             charset = CharSetTest(charsetint);
             if (is_post()) {
                 var postcontent = F.post('content');
-                if (charsetint!=1) {
+                if (charsetint != 1) {
                     if (IO.file.writeAllText(filepath, postcontent, charset)) {
                         info = {
                             'info': '文件编辑保存成功',
@@ -304,38 +304,38 @@ this.display('Home:Upload');
                             'status': 0
                         };
                     }
-                }else{//去除utf-8的BOM头
+                } else { //去除utf-8的BOM头
                     var nobom = require("WriteNoBom");
                     var stream = new nobom(charset);
                     stream.WriteText(postcontent);
-                    if (stream.SaveToFile(filepath, 2)==true) {
-                     info = {
-                        'info': '文件编辑保存成功',
-                        'status': 1
-                    };
-                } else {
-                    info = {
-                        'info': '文件编辑保存失败',
-                        'status': 0
-                    };
+                    if (stream.SaveToFile(filepath, 2) == true) {
+                        info = {
+                            'info': '文件编辑保存成功',
+                            'status': 1
+                        };
+                    } else {
+                        info = {
+                            'info': '文件编辑保存失败',
+                            'status': 0
+                        };
+                    }
+                    stream.Close();
                 }
-                stream.Close();
             }
+            content = F.encodeHtml(IO.file.readAllText(filepath, charset));
+        } else {
+            content = '文件内容超过1Mb，请下载后编辑';
         }
-        content = F.encodeHtml(IO.file.readAllText(filepath, charset));
     } else {
-        content = '文件内容超过1Mb，请下载后编辑';
+        content = '读取文件不存在';
     }
-} else {
-    content = '读取文件不存在';
-}
-this.assign('hashid', F.guid("N"));
-this.assign('filepath', filepath);
-this.assign('charset', charsetint);
-this.assign("info", info);
-this.assign("content", content);
-this.assign("upath", upath);
-this.display('Home:Edit');
+    this.assign('hashid', F.guid("N"));
+    this.assign('filepath', filepath);
+    this.assign('charset', charsetint);
+    this.assign("info", info);
+    this.assign("content", content);
+    this.assign("upath", upath);
+    this.display('Home:Edit');
 });
 /**
  * [重命名]
@@ -344,7 +344,7 @@ this.display('Home:Edit');
  * @param    {[type]}                 ){    var content,info;   var filepath [description]
  * @return   {[type]}                         [description]
  */
- HomeController.extend("RName", function() {
+HomeController.extend("RName", function() {
     var content, info;
     var filepath = F.decode(F.get('Path'));
     var upaths = IO.parent(filepath);
@@ -413,7 +413,7 @@ this.display('Home:Edit');
  * @param    {[type]}                 ){    var content,info;   var filepath [description]
  * @return   {[type]}                         [description]
  */
- HomeController.extend("Del", function() {
+HomeController.extend("Del", function() {
     var content, info;
     var filepath = F.decode(F.get('Path'));
     var upaths = IO.parent(filepath);
@@ -467,7 +467,7 @@ this.display('Home:Edit');
  * @param    {[type]}                 ){    var content,info;   var filepath [description]
  * @return   {[type]}                         [description]
  */
- HomeController.extend("Create", function() {
+HomeController.extend("Create", function() {
     var content, info;
     var filepath = F.decode(F.get('Path'));
     // var upaths=IO.parent(filepath);
@@ -534,7 +534,7 @@ this.display('Home:Edit');
  * @param    {[type]}                 ){    var directory,content;  var filepath [description]
  * @return   {[type]}                         [description]
  */
- HomeController.extend("Directory", function() {
+HomeController.extend("Directory", function() {
     var directory, content;
     var filepath = F.decode(F.get('Path'));
     var upaths = IO.parent(filepath);
@@ -560,7 +560,7 @@ this.display('Home:Edit');
  * @param    {[type]}                 ){    var file,content;   var filepath [description]
  * @return   {[type]}                         [description]
  */
- HomeController.extend("File", function() {
+HomeController.extend("File", function() {
     var file, content;
     var filepath = F.decode(F.get('Path'));
     var upaths = IO.parent(filepath);
@@ -586,7 +586,7 @@ this.display('Home:Edit');
  * @param    {ActiveXObject}          ){    dump(IO.build('E:'));   var shell [description]
  * @return   {[type]}                     [description]
  */
- HomeController.extend("Shell", function() {
+HomeController.extend("Shell", function() {
     var content, shell;
     var filepath = F.decode(F.get('Path'));
     var upath = (!is_empty(filepath) && IO.is(filepath) && IO.directory.exists(filepath)) ? Mo.U('Home/Index', 'Path=' + F.encode(filepath)) : Mo.U('Home/Drive'); //生成上级路径信息
@@ -612,18 +612,21 @@ this.display('Home:Edit');
  * @param    {[type]}                 ){    dump(IO.build('E:'));} [description]
  * @return   {[type]}                                             [description]
  */
- HomeController.extend("Unzip", function() {
+HomeController.extend("Unzip", function() {
     var Zip = require("zip"); //引入zip组件
-    var content,info;
+    var content, info;
     var filepath = F.decode(F.get('Path'));
     var upaths = IO.parent(filepath);
     var upath = (!is_empty(upaths) && IO.is(upaths) && IO.directory.exists(upaths)) ? Mo.U('Home/Index', 'Path=' + F.encode(upaths)) : Mo.U('Home/Drive'); //生成上级路径信息
     if (!is_empty(filepath) && IO.is(filepath) && IO.file.exists(filepath)) {
         var file = IO.file.get(filepath);
-        var fp = IO.file.open(filepath,{forText:true,forRead:true});
-        var txt = IO.file.read(fp,2);
+        var fp = IO.file.open(filepath, {
+            forText: true,
+            forRead: true
+        });
+        var txt = IO.file.read(fp, 2);
         IO.file.close(fp);
-        if (F.string.test(file.type, /zip/gi) && txt=='PK') {
+        if (F.string.test(file.type, /zip/gi) && txt == 'PK') {
             if (is_post()) {
                 var unpath = !is_empty(F.post('unpath')) ? F.post('unpath') : upaths;
                 try {
@@ -636,7 +639,7 @@ this.display('Home:Edit');
                     };
                 } catch (ex) {
                     info = {
-                        'info': '文件解压失败:'+ex,
+                        'info': '文件解压失败:' + ex,
                         'status': 0
                     };
                 }
@@ -647,7 +650,7 @@ this.display('Home:Edit');
     } else {
         content = '目标文件不存在';
     }
-    this.assign('info',info);
+    this.assign('info', info);
     this.assign("filepath", filepath);
     this.assign("upaths", upaths);
     this.assign("content", content);
@@ -662,40 +665,40 @@ this.display('Home:Edit');
  * @param    {String}                 ){                 if(is_ajax()){        Response.ContentType [description]
  * @return   {[type]}                     [description]
  */
- HomeController.extend("Dos",function(){
-    if(is_ajax()){
-        Response.ContentType = "application/json";//设置请求头
-        var paths = F.decode(F.post('path'));//这。。。。
+HomeController.extend("Dos", function() {
+    if (is_ajax()) {
+        Response.ContentType = "application/json"; //设置请求头
+        var paths = F.decode(F.post('path')); //这。。。。
         if (!is_empty(paths) && IO.is(paths) && IO.directory.exists(paths)) {
             path = paths;
         } else {
             path = F.mappath("../");
         }
-        var shell = F.post('shell');//提交的shell
-        var drive = IO.drive(path);//啪啪啪
-        var d=drive.path;//获取磁盘
-        var hpath=F.replace(path, d , '');//
-        hpath=hpath!=''?'cd '+hpath+'&':'';//获取目录
+        var shell = F.post('shell'); //提交的shell
+        var drive = IO.drive(path); //啪啪啪
+        var d = drive.path; //获取磁盘
+        var hpath = F.replace(path, d, ''); //
+        hpath = hpath != '' ? 'cd ' + hpath + '&' : ''; //获取目录
         if (!is_empty(shell)) {
-            if (F.string.trim(shell)!='cmd') {
+            if (F.string.trim(shell) != 'cmd') {
                 var cmd = '%COMSPEC% /c ' + d + '&' + hpath + F.string.trim(shell) + '&echo [_s_DIR_g_]&cd&echo [_s_DIR_g_]';
                 var S = new ActiveXObject("WScript.Shell");
-                var X = S.exec(cmd);//执行
-                content = X.StdOut.ReadAll();//获取返回内容
-                cmderr=X.StdErr.ReadAll();//获取错误
-                var c=F.string.matches(content,/\[_s_DIR_g_\]((?:.|[\r\n])*)\[_s_DIR_g_\]/i);//匹配
-                var rm=!is_empty(c[0])?c[0]:'';//路径
-                var p=!is_empty(c[1])?c[1]:path;//路径
-                var p=str_replace(F.replace(p,/[\r\n]/ig,''));//去掉换行
-                var s=str_replace(F.replace(content, rm , '')+cmderr);//核定内容
-                F.echo('{"msg":"'+s+'","path":"'+p+'"}');//返回json到前台
-            }else{
-                F.echo('{"msg":"Microsoft Windows [版本 10.0.10586]\\r\\n(c) 2015 Microsoft Corporation。保留所有权利。","path":"'+str_replace(path)+'"}');//如果提交的是cmd防止循环调用
+                var X = S.exec(cmd); //执行
+                content = X.StdOut.ReadAll(); //获取返回内容
+                cmderr = X.StdErr.ReadAll(); //获取错误
+                var c = F.string.matches(content, /\[_s_DIR_g_\]((?:.|[\r\n])*)\[_s_DIR_g_\]/i); //匹配
+                var rm = !is_empty(c[0]) ? c[0] : ''; //路径
+                var p = !is_empty(c[1]) ? c[1] : path; //路径
+                var p = str_replace(F.replace(p, /(\r\n|\r)/ig, '')); //去掉换行
+                var s = str_replace(F.replace(content, rm, '') + cmderr); //核定内容
+                F.echo('{"msg":"' + s + '","path":"' + p + '"}'); //返回json到前台
+            } else {
+                F.echo('{"msg":"Microsoft Windows [版本 10.0.10586]\\r\\n(c) 2015 Microsoft Corporation。保留所有权利。","path":"' + str_replace(path) + '"}'); //如果提交的是cmd防止循环调用
             }
-        }else{
-            F.echo('{"msg":"","path":"'+str_replace(path)+'"}');//没有数据就直接输出
+        } else {
+            F.echo('{"msg":"","path":"' + str_replace(path) + '"}'); //没有数据就直接输出
         }
-    }else{
+    } else {
         var paths = F.decode(F.get('Path'));
         if (!is_empty(paths) && IO.is(paths) && IO.directory.exists(paths)) {
             filepath = paths;
@@ -717,8 +720,7 @@ this.display('Home:Edit');
  * @param    {[type]}                 name){                 F.echo("错误：未定义" + name + "方法");} [description]
  * @return   {[type]}                         [description]
  */
- HomeController.extend("empty", function(name){
+HomeController.extend("empty", function(name) {
     F.goto(Mo.U('Home/Index'));
 });
-
 </script>
