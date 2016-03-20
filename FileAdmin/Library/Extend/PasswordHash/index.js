@@ -2,7 +2,6 @@
  * @package js passhash
  * @mail zishang520@gmail.com
  * @version 0.1
- * ???
  * itoa64;
  * iteration_count_log2;
  * portable_hashes;
@@ -12,7 +11,7 @@ var php_js = {};
 
 function uniqid(prefix, more_entropy) {
     /**
-     * ???Ψһ??d
+     * 唯一id
      * @Author   ZiShang520
      * @DateTime 2016-01-14T09:56:11+0800
      * discuss at: http://phpjs.org/functions/uniqid/
@@ -80,7 +79,7 @@ phtotype.get_random_bytes = function(count) {
     return Hex.parse(this.random_state.slice(0, count * 2));
 };
 phtotype.gensalt_private = function(input) {
-    var output = '$P$';
+    var output = '$p$';
     output += this.itoa64.substr(Math.min(this.iteration_count_log2 + 5, 30), 1);
     output += Base64.e(input);
     return output;
@@ -90,7 +89,7 @@ phtotype.crypt_private = function(password, setting) {
     if (setting.substr(0, 2) == output)
         output = '*1';
 
-    if (setting.substr(0, 3) != '$P$')
+    if (setting.substr(0, 3) != '$p$')
         return output;
 
     var count_log2 = this.itoa64.indexOf(setting.substr(3, 1));

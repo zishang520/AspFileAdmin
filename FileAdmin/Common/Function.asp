@@ -361,6 +361,7 @@ empty=function (obj){
  */
  str_replace = function(str) {
     str = str || '';
+    str = F.encodeHtml(str);
     str = str.replace(/\\/ig, '\\\\');
     // str=str.replace(/'/ig , "\\'");
     str = str.replace(/"/ig, '\\"');
