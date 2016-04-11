@@ -352,7 +352,7 @@ HomeController.extend("RName", function() {
     if (!is_empty(filepath) && IO.is(filepath) && (IO.file.exists(filepath) || IO.directory.exists(filepath))) {
         if (is_post()) {
             var newnames = F.post('newname');
-            if (!is_empty(newnames) && !F.string.test(newnames, /[\/|\\|\:|\*|\?|\"|\<|\>|\|]/g)) { //"//为了好看
+            if (!is_empty(newnames) && !F.string.test(newnames, /[\/|\\|\:|\*|\?|\"|\<|\>|\|]/g)) {
                 var newname = IO.build(upaths, newnames);
                 if (IO.file.exists(filepath)) { //
                     if (IO.file.move(filepath, newname) !== false) {
