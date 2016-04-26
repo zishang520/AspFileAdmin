@@ -112,7 +112,7 @@ HomeController.extend("Upload", function() {
                 /*client text charset*/
                 SavePath: filepath,
                 /*dir that files will be saved in it.*/
-                RaiseServerError: false /* when it is false, don not push exception to Global ExceptionManager, just save in F.exports.upload.exception.*/ ,
+                RaiseServerError: false, /* when it is false, don not push exception to Global ExceptionManager, just save in F.exports.upload.exception.*/
                 OnError: function(e, cfg) { /*event, on some errors are raised. */
                     info = {
                         'info': e,
@@ -476,7 +476,7 @@ HomeController.extend("Create", function() {
         if (is_post()) {
             var type = F.post.int('type', 0);
             var newfilepath = F.post('newnames');
-            if (!is_empty(newfilepath) && !F.string.test(newfilepath, /[\/|\\|\:|\*|\?|\"|\<|\>|\|]/)) { //"//为了好看
+            if (!is_empty(newfilepath) && !F.string.test(newfilepath, /[\/|\\|\:|\*|\?|\"|\<|\>|\|]/g)) {
                 var newnames = IO.build(filepath, newfilepath); //
                 if (!IO.file.exists(newnames) && !IO.directory.exists(newnames)) { //
                     if (type == 1) {
