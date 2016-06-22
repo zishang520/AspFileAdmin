@@ -4,7 +4,7 @@
 /*
 ** File: default.asp
 ** Usage: the entry.
-** About: 
+** About:
 **	support@mae.im
 */
 define("MO_CHARSET","UTF-8");

@@ -3,7 +3,7 @@
  * [LoginController description]
  * @type {[type]}
  */
- PublicController = IController.create();
+PublicController = IController.create();
 
 /**
  * 登陆前台
@@ -12,7 +12,7 @@
  * @param    {[type]}                 ){                 if (is_post()) {        dump(F.post());        dump(F.session('__csr'))    }    this.display('Login:Index'); } [description]
  * @return   {[type]}                     [description]
  */
- PublicController.extend('Login', function() {
+PublicController.extend('Login', function() {
     if (!is_install()) {
         F.goto(Mo.U('Public/Install'));
         F.exit();
@@ -20,14 +20,14 @@
     var info;
     if (is_post()) {
         var Hash = require("PasswordHash");
-        var result = new Hash(5,20);
+        var result = new Hash(5, 20);
         var psafe = F.post("code");
         var ssafe = F.session("code");
         if (!is_empty(psafe) && !is_empty(ssafe) && psafe.toLocaleLowerCase() === ssafe.toLocaleLowerCase()) {
             var username = F.post('username');
             var password = F.post('password');
             if (!is_empty(username) && !is_empty(password)) {
-                if (get_install('USER') === username && result.CheckPassword(password,get_install('PASS'))) {
+                if (get_install('USER') === username && result.CheckPassword(password, get_install('PASS'))) {
                     var ip = ip2long(F.server("REMOTE_ADDR"));
                     var datetime = parseInt(F.timespan(new Date())) + 24 * 3600;
                     var string = '{"username":"' + username + '","password":"' + password + '","ip":' + ip + ',"datetime":"' + datetime + '"}';
@@ -43,8 +43,8 @@
                         httponly: true,
                         path: "/"
                     });
-                    F.session("admin.__Hash",string);
-                    F.session("admin.__token",token);
+                    F.session("admin.__Hash", string);
+                    F.session("admin.__token", token);
                     info = {
                         info: '登陆成功',
                         status: 1
@@ -69,7 +69,7 @@
         }
         F.session.destroy("code");
     }
-    var url=(Mo.Action=='Login')?Mo.U('Home/Index'):(!is_empty(F.server('HTTP_REFERER'))?F.server('HTTP_REFERER'):Mo.U());
+    var url = (Mo.Action == 'Login') ? Mo.U('Home/Index') : (!is_empty(F.server('HTTP_REFERER')) ? F.server('HTTP_REFERER') : Mo.U());
     // var GA = require("ga");
     // this.assign('inio',GA.get_qrcode_url(get_install('USER'), GA.create_secret(16),'MoaspFile',true));
     this.assign('url', url);
@@ -84,10 +84,10 @@
  * @param    {[type]}                 ) {               if (!is_install()) {        var info;        if (is_post()) {            var psafe [description]
  * @return   {[type]}                   [description]
  */
- PublicController.extend('Install', function() {
+PublicController.extend('Install', function() {
     if (!is_install()) {
         var Hash = require("PasswordHash");
-        var result = new Hash(5,20);
+        var result = new Hash(5, 20);
         var info;
         if (is_post()) {
             var psafe = F.post("code");
@@ -152,9 +152,13 @@
  * @param    {[type]}                 ){                 ExceptionManager.errorReporting(E_ERROR);    Safecode("code", {padding:8, odd:3, font:'yahei'});} [description]
  * @return   {[type]}                     [description]
  */
- PublicController.extend("Code",function(){
+PublicController.extend("Code", function() {
     ExceptionManager.errorReporting(E_ERROR);
-    Safecode("code", {padding:8, odd:3, font:'yahei'});
+    Safecode("code", {
+        padding: 8,
+        odd: 3,
+        font: 'yahei'
+    });
 });
 
 /**
@@ -164,32 +168,32 @@
  * @param    {[type]}                 ) {               var Loader [description]
  * @return   {[type]}                   [description]
  */
- PublicController.extend("Loader", function() {
+PublicController.extend("Loader", function() {
     var Loader = require("loader");
-    if(Loader){
-        if (F.get('load')=='js') {
+    if (Loader) {
+        if (F.get('load') == 'js') {
             Loader('/FileAdminIndex/js/jquery.min;/FileAdminIndex/js/bootstrap.min;/FileAdminIndex/js/select2.full.min.js');
         }
-        if (F.get('load')=='css') {
+        if (F.get('load') == 'css') {
             Loader('/FileAdminIndex/css/select2.min;/FileAdminIndex/css/zi-all.css');
         }
-        if (F.get('load')=='codejs') {
+        if (F.get('load') == 'codejs') {
             Loader('/FileAdminIndex/js/code.min.js');
         }
-        if (F.get('load')=='codecss') {
+        if (F.get('load') == 'codecss') {
             Loader('/FileAdminIndex/css/code.min.css');
         }
     }
 });
 
- /**
+/**
  * 空方法
  * @Author   ZiShang520
  * @DateTime 2016-01-09T21:07:00+0800
  * @param    {[type]}                 name){                 F.echo("错误：未定义" + name + "方法");} [description]
  * @return   {[type]}                         [description]
  */
- PublicController.extend("empty", function(name){
+PublicController.extend("empty", function(name) {
     F.goto(Mo.U('Home/Index'));
 });
 </script>

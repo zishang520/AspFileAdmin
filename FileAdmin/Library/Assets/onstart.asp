@@ -1,9 +1,9 @@
 <script language="jscript" runat="server">
-    onstart = IClass.create();
-    onstart.extend("Index", function() {
-    var __LATE = is_install()?get_install('KEY'):'3#14519/14627/35521/39041/15797/17123'; //密钥
-    var __IV = is_install()?get_install('IV'):'9#a64256a8b/5b2e99b/3cab659dc/3391bfd'; //偏移
-    var CryptoJS = require("cryptojs");//核心算法
+onstart = IClass.create();
+onstart.extend("Index", function() {
+    var __LATE = is_install() ? get_install('KEY') : '3#14519/14627/35521/39041/15797/17123'; //密钥
+    var __IV = is_install() ? get_install('IV') : '9#a64256a8b/5b2e99b/3cab659dc/3391bfd'; //偏移
+    var CryptoJS = require("cryptojs"); //核心算法
     /**
      * 加密核心
      * @Author   ZiShang520
@@ -11,25 +11,27 @@
      * @param    {[type]}                 str       [description]
      * @param    {[type]}                 condition [description]
      */
-     AES_ED = function(str, condition) {
-        var condition=condition || 1;
+    AES_ED = function(str, condition) {
+        var condition = condition || 1;
         CryptoJS.require.Padding().Mode();
         CryptoJS.require['AES']().Format.Hex();
         var key = CryptoJS.enc.Utf8.parse(__LATE);
-        var iv  = CryptoJS.enc.Utf8.parse(__IV);
-        var cfg={
+        var iv = CryptoJS.enc.Utf8.parse(__IV);
+        var cfg = {
             iv: iv,
-            mode:CryptoJS.mode['CTRGladman'],
-            padding:CryptoJS.pad['Pkcs7'],
-            format:CryptoJS.format.Hex
+            mode: CryptoJS.mode['CTRGladman'],
+            padding: CryptoJS.pad['Pkcs7'],
+            format: CryptoJS.format.Hex
         };
         //cfg用于AES和DES，其他加密会忽略部分设置
-        if(condition==1){
+        if (condition == 1) {
             var srcs = CryptoJS.enc.Utf8.parse(str);
             return CryptoJS['AES'].encrypt(srcs, key, cfg).toString();
         } else if (condition == 2) {
             var srcs = CryptoJS.enc.Hex.parse(str);
-            var decryptdata = CryptoJS['AES'].decrypt(CryptoJS.lib.CipherParams.create({ ciphertext:srcs}), key,cfg); //解密
+            var decryptdata = CryptoJS['AES'].decrypt(CryptoJS.lib.CipherParams.create({
+                ciphertext: srcs
+            }), key, cfg); //解密
             return decryptdata.toString(CryptoJS.enc.Utf8);
         }
     };
@@ -38,28 +40,32 @@
      * @Author   ZiShang520
      * @DateTime 2016-01-10T00:59:32+0800
      */
-     Auth = function (){
+    Auth = function() {
         var Hash = require("PasswordHash");
-        var result = new Hash(5,20);
+        var result = new Hash(5, 20);
         var ctrl = Mo.A("Public");
         var adminsession = F.session.parse("admin");
         var admincookie = cookie("Z_Cookies");
         if (!empty(admincookie)) {
             if (!empty(adminsession)) {
-                if (AES_ED(adminsession['__Hash'],1)!==admincookie.__Hash || adminsession['__token']!==admincookie.__token) {
-                    cookie("Z_Cookies",'',{expires: '1970-01-01 00:00:00'});
+                if (AES_ED(adminsession['__Hash'], 1) !== admincookie.__Hash || adminsession['__token'] !== admincookie.__token) {
+                    cookie("Z_Cookies", '', {
+                        expires: '1970-01-01 00:00:00'
+                    });
                     F.session.destroy(true);
                     ctrl.Login();
                     F.exit();
                 }
-            }else{
-                var admincookiesinfo=F.json(AES_ED(admincookie.__Hash,2));
+            } else {
+                var admincookiesinfo = F.json(AES_ED(admincookie.__Hash, 2));
                 if (!is_empty(admincookiesinfo)) {
-                    if (is_empty(admincookiesinfo['username']) || is_empty(admincookiesinfo['password']) || is_empty(admincookiesinfo['datetime']) || admincookiesinfo['username']!==get_install('USER') || !result.CheckPassword(admincookiesinfo['password'],get_install('PASS'))) {
-                        cookie("Z_Cookies",'',{expires: '1970-01-01 00:00:00'});
+                    if (is_empty(admincookiesinfo['username']) || is_empty(admincookiesinfo['password']) || is_empty(admincookiesinfo['datetime']) || admincookiesinfo['username'] !== get_install('USER') || !result.CheckPassword(admincookiesinfo['password'], get_install('PASS'))) {
+                        cookie("Z_Cookies", '', {
+                            expires: '1970-01-01 00:00:00'
+                        });
                         ctrl.Login();
                         F.exit();
-                    }else{
+                    } else {
                         var ip = ip2long(F.server("REMOTE_ADDR"));
                         var datetime = admincookiesinfo['datetime'];
                         var string = '{"username":"' + get_install('USER') + '","password":"' + admincookiesinfo['password'] + '","ip":' + ip + ',"datetime":"' + datetime + '"}';
@@ -75,16 +81,18 @@
                             httponly: true,
                             path: "/"
                         });
-                        F.session("admin.__Hash",string);
-                        F.session("admin.__token",token);
+                        F.session("admin.__Hash", string);
+                        F.session("admin.__token", token);
                     }
-                }else{
-                    cookie("Z_Cookies",'',{expires: '1970-01-01 00:00:00'});
+                } else {
+                    cookie("Z_Cookies", '', {
+                        expires: '1970-01-01 00:00:00'
+                    });
                     ctrl.Login();
                     F.exit();
                 }
             }
-        }else{
+        } else {
             ctrl.Login();
             F.exit();
         }
@@ -97,7 +105,7 @@
      * @param    {[type]}                 F.server('HTTP_X_REQUESTED_WITH') [description]
      * @return   {[type]}                                                   [description]
      */
-     if (F.server('HTTP_X_REQUESTED_WITH') == 'XMLHttpRequest') {
+    if (F.server('HTTP_X_REQUESTED_WITH') == 'XMLHttpRequest') {
         if (is_empty(F.server('HTTP_X_CSRF_TOKEN')) || is_empty(F.session('__csrf')) || is_empty(cookie('__csrf')) || F.server('HTTP_X_CSRF_TOKEN') !== F.session('__csrf') || MD5(F.server('HTTP_X_CSRF_TOKEN') + __LATE) !== cookie('__csrf') || MD5(F.session('__csrf') + __LATE) !== cookie('__csrf')) {
             var ctrl = Mo.A("Error");
             ctrl.Index(); //调用Error控制器的Index方法
@@ -128,7 +136,7 @@
      * @param    {[type]}                 !is_empty(F.session('__error')) [description]
      * @return   {[type]}                                                 [description]
      */
-     if (!is_empty(F.session('__error'))) {
+    if (!is_empty(F.session('__error'))) {
         var error = F.session('__error');
         Mo.assign('error', error);
         F.session.destroy('__error');

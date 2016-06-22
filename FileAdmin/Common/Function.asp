@@ -5,7 +5,7 @@
  * @DateTime 2015-10-29T10:12:08+0800
  * @param    {[type]}                 path [description]
  */
- FileName = function(path) {
+FileName = function(path) {
     var filename = path.substr(path.lastIndexOf("\\") + 1);
     return filename;
 };
@@ -15,7 +15,7 @@
  * @DateTime 2015-10-29T10:12:21+0800
  * @param    {[type]}                 paths [description]
  */
- Path = function(paths) {
+Path = function(paths) {
     var path = paths.substr(0, paths.lastIndexOf("\\"));
     return path;
 };
@@ -25,23 +25,23 @@
  * @DateTime 2015-10-29T10:12:25+0800
  * @param    {[type]}                 type [description]
  */
- CharSetTest = function(type) {
+CharSetTest = function(type) {
     switch (type) {
         case 1:
-        charset = 'utf-8';
-        break;
+            charset = 'utf-8';
+            break;
         case 2:
-        charset = 'gb2312';
-        break;
+            charset = 'gb2312';
+            break;
         case 3:
-        charset = 'gbk';
-        break;
+            charset = 'gbk';
+            break;
         case 4:
-        charset = 'big5';
-        break;
+            charset = 'big5';
+            break;
         default:
-        charset = 'utf-8';
-        break;
+            charset = 'utf-8';
+            break;
     }
     return charset;
 };
@@ -51,7 +51,7 @@
  * @DateTime 2015-10-29T10:12:30+0800
  * @param    {[type]}                 bytes [description]
  */
- SizeConvert = function(bytes) {
+SizeConvert = function(bytes) {
     var size, bytesize, bytes = parseInt(bytes);
     if (bytes >= 1073741824) {
         bytesize = parseInt((bytes / 1073741824) * 1000) / 1000;
@@ -74,7 +74,7 @@
  * @param    {[type]}                 sizea [description]
  * @param    {[type]}                 sizeb [description]
  */
- SizePercent = function(sizea, sizeb) {
+SizePercent = function(sizea, sizeb) {
     var percent = parseInt(sizea) / parseInt(sizeb);
     var percent = 100 - parseInt(percent * 100);
     return parseInt(percent);
@@ -85,31 +85,31 @@
  * @DateTime 2015-10-29T10:12:43+0800
  * @param    {[type]}                 number [description]
  */
- VolumenameAuto = function(number) {
+VolumenameAuto = function(number) {
     var typename;
     var type = parseInt(number) + 1;
     switch (type) {
         case 1:
-        typename = '设备无法识别';
-        break;
+            typename = '设备无法识别';
+            break;
         case 2:
-        typename = '可移动磁盘';
-        break;
+            typename = '可移动磁盘';
+            break;
         case 3:
-        typename = '本地磁盘';
-        break;
+            typename = '本地磁盘';
+            break;
         case 4:
-        typename = '网络磁盘';
-        break;
+            typename = '网络磁盘';
+            break;
         case 5:
-        typename = 'CD/ROM光盘';
-        break;
+            typename = 'CD/ROM光盘';
+            break;
         case 6:
-        typename = '随机存储器';
-        break;
+            typename = '随机存储器';
+            break;
         default:
-        typename = '未知磁盘';
-        break;
+            typename = '未知磁盘';
+            break;
     }
     return typename;
 };
@@ -120,7 +120,7 @@
  * @param    {[type]}                 ip [description]
  * @return   {[type]}                    [description]
  */
- ip2long = function(ip) {
+ip2long = function(ip) {
     var num = 0;
     ip = ip.split(".");
     num = Number(ip[0]) * 256 * 256 * 256 + Number(ip[1]) * 256 * 256 + Number(ip[2]) * 256 + Number(ip[3]);
@@ -134,7 +134,7 @@
  * @param    {[type]}                 num [description]
  * @return   {[type]}                     [description]
  */
- long2ip = function(num) {
+long2ip = function(num) {
     var str;
     var tt = new Array();
     tt[0] = (num >>> 24) >>> 0;
@@ -151,7 +151,7 @@
  * @param    {[type]}                 arg1 [description]
  * @param    {[type]}                 arg2 [description]
  */
- Add = function(arg1, arg2) {
+Add = function(arg1, arg2) {
     return parseInt(arg1) + parseInt(arg2);
 };
 /**
@@ -161,7 +161,7 @@
  * @param    {[type]}                 arg1 [description]
  * @param    {[type]}                 arg2 [description]
  */
- Sub = function(arg1, arg2) {
+Sub = function(arg1, arg2) {
     return parseInt(arg1) - parseInt(arg2);
 };
 /**
@@ -171,7 +171,7 @@
  * @param    {[type]}                 arg1 [description]
  * @param    {[type]}                 arg2 [description]
  */
- FloatAdd = function(arg1, arg2) {
+FloatAdd = function(arg1, arg2) {
     var r1, r2, m;
     try {
         r1 = arg1.toString().split(".")[1].length
@@ -193,7 +193,7 @@
  * @param    {[type]}                 arg1 [description]
  * @param    {[type]}                 arg2 [description]
  */
- FloatSub = function(arg1, arg2) {
+FloatSub = function(arg1, arg2) {
     var r1, r2, m, n;
     try {
         r1 = arg1.toString().split(".")[1].length
@@ -218,10 +218,10 @@
  * @param    {[type]}                 arg1 [description]
  * @param    {[type]}                 arg2 [description]
  */
- FloatMul = function(arg1, arg2) {
+FloatMul = function(arg1, arg2) {
     var m = 0,
-    s1 = arg1.toString(),
-    s2 = arg2.toString();
+        s1 = arg1.toString(),
+        s2 = arg2.toString();
     try {
         m += s1.split(".")[1].length
     } catch (e) {}
@@ -238,10 +238,10 @@
  * @param    {[type]}                 arg1 [description]
  * @param    {[type]}                 arg2 [description]
  */
- FloatDiv = function(arg1, arg2) {
+FloatDiv = function(arg1, arg2) {
     var t1 = 0,
-    t2 = 0,
-    r1, r2;
+        t2 = 0,
+        r1, r2;
     try {
         t1 = arg1.toString().split(".")[1].length
     } catch (e) {}
@@ -261,7 +261,7 @@
  * @param    {[type]}                 obj [description]
  * @return   {[type]}                     [description]
  */
- writeObj = function(obj) {
+writeObj = function(obj) {
     var description = "";
     for (var i in obj) {
         var property = obj[i];
@@ -277,8 +277,8 @@
  * @param    {[type]}                 obj [description]
  * @return   {[type]}                     [description]
  */
-empty=function (obj){
-    for(var name in obj){
+empty = function(obj) {
+    for (var name in obj) {
         return false;
     }
     return true;
@@ -289,13 +289,9 @@ empty=function (obj){
  * @DateTime 2015-10-29T10:11:58+0800
  * @return   {Boolean}                [description]
  */
- is_post = function() {
+is_post = function() {
     if (!is_empty(F.server('REQUEST_METHOD'))) {
-        if (F.server('REQUEST_METHOD') == 'POST') {
-            return true;
-        } else {
-            return false;
-        }
+        return (F.server('REQUEST_METHOD') == 'POST');
     } else {
         return false;
     }
@@ -307,13 +303,9 @@ empty=function (obj){
  * @DateTime 2016-01-08T11:22:32+0800
  * @return   {Boolean}                [description]
  */
- is_ajax = function() {
+is_ajax = function() {
     if (!is_empty(F.server('HTTP_X_REQUESTED_WITH'))) {
-        if (F.server('HTTP_X_REQUESTED_WITH') == 'XMLHttpRequest') {
-            return true;
-        } else {
-            return false;
-        }
+        return (F.server('HTTP_X_REQUESTED_WITH') == 'XMLHttpRequest');
     } else {
         return false;
     }
@@ -325,13 +317,9 @@ empty=function (obj){
  * @DateTime 2016-01-09T21:45:30+0800
  * @return   {Boolean}                [description]
  */
- is_install = function() {
+is_install = function() {
     var info = MCM("User");
-    if (is_empty(info('USER')) || is_empty(info('PASS')) || is_empty(info('KEY')) || is_empty(info('IV'))) {
-        return false;
-    } else {
-        return true;
-    }
+    return !(is_empty(info('USER')) || is_empty(info('PASS')) || is_empty(info('KEY')) || is_empty(info('IV')));
 };
 /**
  * 获取安装信息
@@ -340,7 +328,7 @@ empty=function (obj){
  * @param    {[type]}                 key [description]
  * @return   {[type]}                     [description]
  */
- get_install = function(key) {
+get_install = function(key) {
     if (is_install()) {
         var info = MCM("User");
         if (!is_empty(key)) {
@@ -348,7 +336,7 @@ empty=function (obj){
         } else {
             return info.config;
         }
-    }else{
+    } else {
         return undefined;
     }
 };
@@ -359,7 +347,7 @@ empty=function (obj){
  * @param    {[type]}                 str [description]
  * @return   {[type]}                     [description]
  */
- str_replace = function(str) {
+str_replace = function(str) {
     str = str || '';
     str = F.encodeHtml(str);
     str = str.replace(/\\/ig, '\\\\');
