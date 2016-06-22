@@ -112,7 +112,8 @@ HomeController.extend("Upload", function() {
                 /*client text charset*/
                 SavePath: filepath,
                 /*dir that files will be saved in it.*/
-                RaiseServerError: false, /* when it is false, don not push exception to Global ExceptionManager, just save in F.exports.upload.exception.*/
+                RaiseServerError: false,
+                /* when it is false, don not push exception to Global ExceptionManager, just save in F.exports.upload.exception.*/
                 OnError: function(e, cfg) { /*event, on some errors are raised. */
                     info = {
                         'info': e,
@@ -162,63 +163,75 @@ HomeController.extend("Dowload", function() {
     var upath = (!is_empty(upaths) && IO.is(upaths) && IO.directory.exists(upaths)) ? Mo.U('Home/Index', 'Path=' + F.encode(upaths)) : Mo.U('Home/Drive'); //生成上级路径信息
     if (!is_empty(filepath) && IO.is(filepath) && IO.file.exists(filepath)) {
         var range = F.server('HTTP_RANGE'),
-            inits, stops;
+            inits;
         var file = IO.file.get(filepath);
-        if (file.size > 0) {
-            if (!is_empty(range)) {
-                var byt = F.string.matches(range, /bytes\=(\d+)?-(\d+)?/ig);
-                if (byt.length > 0) {
-                    inits = !is_empty(byt[0][1]) ? parseInt(byt[0][1]) : 0;
-                    if (inits == 0) {
-                        stops = file.size - 1;
-                    } else if (inits > 0 && is_empty(byt[0][2])) {
-                        stops = file.size - 1;
-                    } else {
-                        stops = (!is_empty(byt[0][2]) && inits < (parseInt(byt[0][2]))) ? parseInt(byt[0][2]) : file.size - 1;
-                    }
-                } else {
-                    inits = 0;
-                    stops = file.size - 1;
-                }
+        if (!is_empty(range)) {
+            var byt = F.string.matches(range, /bytes\=(\d+)?-(\d+)?/i);
+            if (byt.length > 0) {
+                inits = !is_empty(byt[1]) ? parseInt(byt[1]) : 0;
             } else {
                 inits = 0;
-                stops = file.size - 1;
-            }
-            if (stops <= file.size) {
-                Response.Buffer = true; //开启缓存完毕输出
-                Response.Clear(); //清除缓存
-                var stream = new ActiveXObject("ADODB.Stream"); //解决下载限制
-                stream.Mode = 3; //读写模式
-                stream.Type = 1; //二进制
-                stream.Open();
-                stream.LoadFromFile(filepath);
-                stream.Position = inits; //流指针
-                Response.Status = "206 Partial Content";
-                Response.ContentType = "application/octet-stream";
-                Response.AddHeader('Accept-Ranges', 'bytes');
-                Response.AddHeader("Content-Disposition", "attachment; filename=\"" + file.name + "\"");
-                Response.AddHeader("Content-Range", "bytes " + inits + "-" + stops + "/" + file.size);
-                Response.AddHeader("Content-Length", stops - inits + 1);
-                if (file.size <= 4096000) {
-                    binstr = stream.Read(file.size);
-                    Response.BinaryWrite(binstr);
-                    Response.Flush();
-                } else {
-                    while (!stream.EOS) {
-                        binstr = stream.Read(4096000);
-                        Response.BinaryWrite(binstr);
-                        Response.Flush();
-                    }
-                }
-                stream.close();
-                stream = null;
-            } else {
-                this.assign('content', '请求参数不合法');
-                this.assign("upath", upath);
-                this.display('Home:Dowload');
             }
         } else {
-            this.assign('content', '该文件为空不能下载');
+            inits = 0;
+        }
+        var packSize = 1024 * 10; //每块10k
+        var Etag = md5(file.Name + file.DateLastModified); //便于恢复下载时提取请求头
+        if (file.size > Number.MAX_VALUE) {
+            //-------文件太大了-------
+            Response.StatusCode = 413; //请求实体太大
+            this.assign('content', '请求实体太大，文件太大了');
+            this.assign("upath", upath);
+            this.display('Home:Dowload');
+            F.exit();
+        }
+        //对应响应头ETag：文件名+文件最后修改时间
+        if (!is_empty(F.server('HTTP_IF_RANGE'))) {
+            //----------上次被请求的日期之后被修改过--------------
+            if (F.server('HTTP_IF_RANGE') != Etag) { //文件修改过
+                Response.StatusCode = 412; //预处理失败
+                this.assign('content', '预处理失败,文件已修改过');
+                this.assign("upath", upath);
+                this.display('Home:Dowload');
+                F.exit();
+            }
+        }
+        if (inits < file.size) {
+            Response.Clear(); //清除缓存
+            Response.Buffer = true; //开启缓存完毕输出
+            var stream = new ActiveXObject("ADODB.Stream"); //解决下载限制
+            stream.Mode = 3; //读写模式
+            stream.Type = 1; //二进制
+            stream.Open();
+            stream.LoadFromFile(filepath);
+            stream.Position = inits; //流指针
+            try {
+                Response.AddHeader('Accept-Ranges', 'bytes');
+                Response.AddHeader('ETag', Etag);
+                Response.AddHeader('Last-Modified', file.DateLastModified);
+                Response.ContentType = "application/octet-stream";
+                Response.AddHeader("Content-Disposition", "attachment;filename=\"" + file.name + "\"");
+                Response.AddHeader("Content-Length", file.size - inits);
+                Response.AddHeader("Connection", "Keep-Alive");
+                if (!is_empty(range)) {
+                    Response.Status = "206 Partial Content";
+                    Response.AddHeader("Content-Range", "bytes " + inits + "-" + (file.size - 1) + "/" + file.size);
+                }
+                var maxCount = Math.ceil((file.size - inits) / packSize); //分块下载，剩余部分可分成的块数
+                for (var i = 0; i < maxCount && Response.IsClientConnected; i++) { //客户端中断连接，则暂停
+                    Response.BinaryWrite(stream.Read(packSize));
+                    Response.Flush();
+                }
+            } catch (e) {
+                this.assign('content', '出现错误' + F.safe(e.description));
+                this.assign("upath", upath);
+                this.display('Home:Dowload');
+            } finally {
+                stream.close();
+                stream = null;
+            }
+        } else {
+            this.assign('content', '请求参数不合法');
             this.assign("upath", upath);
             this.display('Home:Dowload');
         }
@@ -351,42 +364,46 @@ HomeController.extend("RName", function() {
     var upath = (!is_empty(upaths) && IO.is(upaths) && IO.directory.exists(upaths)) ? Mo.U('Home/Index', 'Path=' + F.encode(upaths)) : Mo.U('Home/Drive'); //生成上级路径信息
     if (!is_empty(filepath) && IO.is(filepath) && (IO.file.exists(filepath) || IO.directory.exists(filepath))) {
         if (is_post()) {
-            var newnames = F.post('newname');
-            if (!is_empty(newnames) && !F.string.test(newnames, /[\/|\\|\:|\*|\?|\"|\<|\>|\|]/g)) {
-                var newname = IO.build(upaths, newnames);
-                if (IO.file.exists(filepath)) { //
-                    if (IO.file.move(filepath, newname) !== false) {
-                        info = {
-                            'info': '文件重命名成功',
-                            'status': 1
-                        };
-                        F.session("__error", info);
-                        F.goto(Mo.U('Home/RName', 'Path=' + F.encode(newname)));
-                        F.exit();
-                    } else {
-                        info = {
-                            'info': '文件重命名失败',
-                            'status': 0
-                        };
+            var newname = F.post('newname');
+            if (!is_empty(newname) && !F.string.test(newname, /[\/|\\|\:|\*|\?|\"|\<|\>|\|]/g)) {
+                var newpath = IO.build(upaths, newname);
+                try{
+                    if (IO.file.exists(filepath)) {
+                        var fileinfo = IO.file.get(filepath);
+                        if ((fileinfo.Name = newname) === fileinfo.Name) {
+                            info = {
+                                'info': '文件重命名成功',
+                                'status': 1
+                            };
+                            F.session("__error", info);
+                            F.goto(Mo.U('Home/RName', 'Path=' + F.encode(newpath)));
+                            F.exit();
+                        } else {
+                            info = {
+                                'info': '文件重命名失败',
+                                'status': 0
+                            };
+                        }
+                    } else if (IO.directory.exists(filepath)) {
+                        var dirinfo = IO.directory.get(filepath);
+                        if ((dirinfo.Name = newname) === dirinfo.Name) {
+                            info = {
+                                'info': '文件夹重命名成功',
+                                'status': 1
+                            };
+                            F.session("__error", info);
+                            F.goto(Mo.U('Home/RName', 'Path=' + F.encode(newpath)));
+                            F.exit();
+                        } else {
+                            info = {
+                                'info': '文件夹重命名失败',
+                                'status': 0
+                            };
+                        }
                     }
-                } else if (IO.directory.exists(filepath)) {
-                    if (IO.directory.move(filepath, newname) !== false) {
-                        info = {
-                            'info': '文件夹重命名成功',
-                            'status': 1
-                        };
-                        F.session("__error", info);
-                        F.goto(Mo.U('Home/RName', 'Path=' + F.encode(newname)));
-                        F.exit();
-                    } else {
-                        info = {
-                            'info': '文件夹重命名失败',
-                            'status': 0
-                        };
-                    }
-                } else {
+                } catch(e) {
                     info = {
-                        'info': '未知错误',
+                        'info': '错误:'+F.safe(e.description),
                         'status': 0
                     };
                 }
