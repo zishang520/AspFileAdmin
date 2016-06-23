@@ -1,0 +1,12 @@
+﻿{
+	"name" : "md5_file",
+	"version" : "1.0.0",
+	"description" : "获取文件的Md5",
+	"keywords" : ["md5_file"],
+	"homepage" : "http://www.iox1.com",
+	"license" : "GPLv3",
+	"files" : [
+		"index.js"
+	],
+	"main" : "md5_file/index"
+}

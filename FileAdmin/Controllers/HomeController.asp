@@ -163,17 +163,26 @@ HomeController.extend("Dowload", function() {
     var upath = (!is_empty(upaths) && IO.is(upaths) && IO.directory.exists(upaths)) ? Mo.U('Home/Index', 'Path=' + F.encode(upaths)) : Mo.U('Home/Drive'); //生成上级路径信息
     if (!is_empty(filepath) && IO.is(filepath) && IO.file.exists(filepath)) {
         var range = F.server('HTTP_RANGE'),
-            inits;
+            inits, stops;
         var file = IO.file.get(filepath);
         if (!is_empty(range)) {
             var byt = F.string.matches(range, /bytes\=(\d+)?-(\d+)?/i);
             if (byt.length > 0) {
                 inits = !is_empty(byt[1]) ? parseInt(byt[1]) : 0;
+                if (inits == 0) {
+                    stops = file.size - 1;
+                } else if (inits > 0 && is_empty(byt[2])) {
+                    stops = file.size - 1;
+                } else {
+                    stops = (!is_empty(byt[2]) && inits < (parseInt(byt[2]))) ? parseInt(byt[2]) : file.size - 1;
+                }
             } else {
                 inits = 0;
+                stops = file.size - 1;
             }
         } else {
             inits = 0;
+            stops = file.size - 1;
         }
         var packSize = 1024 * 10; //每块10k
         var Etag = md5(file.Name + file.DateLastModified); //便于恢复下载时提取请求头
@@ -196,7 +205,7 @@ HomeController.extend("Dowload", function() {
                 F.exit();
             }
         }
-        if (inits < file.size) {
+        if (inits < file.size && inits <= stops && stops < file.size) {
             Response.Clear(); //清除缓存
             Response.Buffer = true; //开启缓存完毕输出
             var stream = new ActiveXObject("ADODB.Stream"); //解决下载限制
@@ -211,21 +220,24 @@ HomeController.extend("Dowload", function() {
                 Response.AddHeader('Last-Modified', file.DateLastModified);
                 Response.ContentType = "application/octet-stream";
                 Response.AddHeader("Content-Disposition", "attachment;filename=\"" + file.name + "\"");
-                Response.AddHeader("Content-Length", file.size - inits);
+                Response.AddHeader("Content-Length", stops - inits + 1);
                 Response.AddHeader("Connection", "Keep-Alive");
                 if (!is_empty(range)) {
                     Response.Status = "206 Partial Content";
-                    Response.AddHeader("Content-Range", "bytes " + inits + "-" + (file.size - 1) + "/" + file.size);
+                    Response.AddHeader("Content-Range", "bytes " + inits + "-" + stops + "/" + file.size);
                 }
-                var maxCount = Math.ceil((file.size - inits) / packSize); //分块下载，剩余部分可分成的块数
-                for (var i = 0; i < maxCount && Response.IsClientConnected; i++) { //客户端中断连接，则暂停
-                    Response.BinaryWrite(stream.Read(packSize));
+                if (file.size <= packSize && Response.IsClientConnected) {
+                    Response.BinaryWrite(stream.Read(file.size));
                     Response.Flush();
+                } else {
+                    while (!stream.EOS && Response.IsClientConnected) {
+                        Response.BinaryWrite(stream.Read(packSize));
+                        Response.Flush();
+                        if (stream.Position >= stops) {
+                            stream.SetEOS();
+                        }
+                    }
                 }
-            } catch (e) {
-                this.assign('content', '出现错误' + F.safe(e.description));
-                this.assign("upath", upath);
-                this.display('Home:Dowload');
             } finally {
                 stream.close();
                 stream = null;
@@ -255,8 +267,8 @@ HomeController.extend("ShowImage", function() {
     if (!is_empty(filepath) && IO.is(filepath) && IO.file.exists(filepath)) {
         var file = IO.file.get(filepath);
         if (F.string.endsWith(file.type, '图像')) {
-            var suffix = F.string.matches(file.type, /^\w+/ig);
-            var last = !is_empty(suffix[0][0]) ? suffix[0][0].toLocaleLowerCase() : 'png';
+            var suffix = F.string.matches(file.type, /^\w+/i);
+            var last = !is_empty(suffix[0]) ? suffix[0].toLocaleLowerCase() : 'png';
             var filebin = IO.file.readAllBytes(filepath);
             Response.AddHeader("Content-Type", "image/" + last);
             var stream = new ActiveXObject("ADODB.Stream"); //解决限制
@@ -268,8 +280,7 @@ HomeController.extend("ShowImage", function() {
                 Response.Flush();
             } else {
                 while (!stream.eos) {
-                    binstr = stream.Read(4096000);
-                    Response.BinaryWrite(binstr);
+                    Response.BinaryWrite(stream.Read(4096000));
                     Response.Flush();
                 }
             }
@@ -367,7 +378,7 @@ HomeController.extend("RName", function() {
             var newname = F.post('newname');
             if (!is_empty(newname) && !F.string.test(newname, /[\/|\\|\:|\*|\?|\"|\<|\>|\|]/g)) {
                 var newpath = IO.build(upaths, newname);
-                try{
+                try {
                     if (IO.file.exists(filepath)) {
                         var fileinfo = IO.file.get(filepath);
                         if ((fileinfo.Name = newname) === fileinfo.Name) {
@@ -401,9 +412,9 @@ HomeController.extend("RName", function() {
                             };
                         }
                     }
-                } catch(e) {
+                } catch (e) {
                     info = {
-                        'info': '错误:'+F.safe(e.description),
+                        'info': '错误:' + F.safe(e.description),
                         'status': 0
                     };
                 }
@@ -578,20 +589,27 @@ HomeController.extend("Directory", function() {
  * @return   {[type]}                         [description]
  */
 HomeController.extend("File", function() {
-    var file, content;
+    var file, content, m5;
     var filepath = F.decode(F.get('Path'));
     var upaths = IO.parent(filepath);
     var upath = (!is_empty(upaths) && IO.is(upaths) && IO.directory.exists(upaths)) ? Mo.U('Home/Index', 'Path=' + F.encode(upaths)) : Mo.U('Home/Drive'); //生成上级路径信息
     if (!is_empty(filepath) && IO.is(filepath) && IO.file.exists(filepath)) {
         try {
             file = IO.file.get(filepath);
+            if (!is_empty(F.get('md5'))) {
+                var md5_file = require('md5_file');
+                m5 = md5_file(filepath);
+                md5_file = null;
+            }
         } catch (ex) {
             content = '没有权限';
         }
     } else {
         content = '目标文件不存在';
     }
+    this.assign("filepath", filepath);
     this.assign("file", file);
+    this.assign("file_md5", m5);
     this.assign("content", content);
     this.assign("upath", upath);
     this.display('Home:File');
