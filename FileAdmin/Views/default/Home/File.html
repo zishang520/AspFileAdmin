@@ -10,7 +10,7 @@
 			
 		</div>
 		<a href="{$upath}" class="list-group-item list-group-item-danger"><span class="glyphicon glyphicon-level-up" aria-hidden="true"></span> 返回目录</a>
-		<li class="list-group-item list-group-item-info">文件属性</li>
+		<li class="list-group-item list-group-item-info">文件属性 <a href="{$U('Home/File','&Path='+\{$@filepath:F.encode\}+'&md5=1')}" title="显示文件MD5，该过程有点漫长"><span>显示MD5</span></a></li>
 		<nempty name="content">
 			<div class="alert alert-danger alert-dismissible fade in" role="alert">
 				<strong>{$content}</strong>
@@ -42,6 +42,10 @@
 				<dd>{$file.Size:SizeConvert}</dd>
 				<dt>Type</dt>
 				<dd>{$file.Type}</dd>
+				<nempty name="file_md5">
+					<dt>Md5</dt>
+					<dd>{$file_md5}</dd>
+				</nempty>
 			</dl>
 		</nempty>
 	</nempty>
