@@ -724,7 +724,7 @@ HomeController.extend("Dos", function() {
                 var c = F.string.matches(content, /\[_s_DIR_g_\]((?:.|[\r\n])*)\[_s_DIR_g_\]/i); //匹配
                 var rm = !is_empty(c[0]) ? c[0] : ''; //路径
                 var p = !is_empty(c[1]) ? c[1] : path; //路径
-                var p = str_replace(F.replace(p, /(\r\n|\r)/ig, '')); //去掉换行
+                var p = str_replace(F.replace(p, /(\r\n|\r|\n)/ig, '')); //去掉换行
                 var s = str_replace(F.replace(content, rm, '') + cmderr); //核定内容
                 F.echo('{"msg":"' + s + '","path":"' + p + '"}'); //返回json到前台
             } else {
