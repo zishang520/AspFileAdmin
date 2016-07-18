@@ -23,7 +23,7 @@ HomeController.extend("Index", function() {
     if (!is_empty(gpath) && IO.is(gpath) && IO.directory.exists(gpath)) {
         path = gpath;
     } else {
-        path = F.mappath("../");
+        path = IO.parent(F.mappath(C('MO_ROOT')));
     }
     var upaths = IO.parent(path);
     var upath = (!is_empty(upaths) && IO.is(upaths) && IO.directory.exists(upaths)) ? Mo.U('Home/Index', 'Path=' + F.encode(upaths)) : Mo.U('Home/Drive'); //生成上级路径信息
@@ -707,7 +707,7 @@ HomeController.extend("Dos", function() {
         if (!is_empty(paths) && IO.is(paths) && IO.directory.exists(paths)) {
             path = paths;
         } else {
-            path = F.mappath("../");
+            path = IO.parent(F.mappath(C('MO_ROOT')));
         }
         var shell = F.post('shell'); //提交的shell
         var drive = IO.drive(path); //啪啪啪
@@ -724,7 +724,7 @@ HomeController.extend("Dos", function() {
                 var c = F.string.matches(content, /\[_s_DIR_g_\]((?:.|[\r\n])*)\[_s_DIR_g_\]/i); //匹配
                 var rm = !is_empty(c[0]) ? c[0] : ''; //路径
                 var p = !is_empty(c[1]) ? c[1] : path; //路径
-                var p = str_replace(F.replace(p, /(\r\n|\r)/ig, '')); //去掉换行
+                var p = str_replace(F.replace(p, /(\r\n|\r|\n)/ig, '')); //去掉换行
                 var s = str_replace(F.replace(content, rm, '') + cmderr); //核定内容
                 F.echo('{"msg":"' + s + '","path":"' + p + '"}'); //返回json到前台
             } else {
@@ -738,7 +738,7 @@ HomeController.extend("Dos", function() {
         if (!is_empty(paths) && IO.is(paths) && IO.directory.exists(paths)) {
             filepath = paths;
         } else {
-            filepath = F.mappath("../");
+            filepath = IO.parent(F.mappath(C('MO_ROOT')));
         }
         var upaths = IO.parent(filepath);
         var upath = (!is_empty(upaths) && IO.is(upaths) && IO.directory.exists(upaths)) ? Mo.U('Home/Index', 'Path=' + F.encode(upaths)) : Mo.U('Home/Drive'); //生成上级路径信息
@@ -758,4 +758,5 @@ HomeController.extend("Dos", function() {
 HomeController.extend("empty", function(name) {
     F.goto(Mo.U('Home/Index'));
 });
+
 </script>
